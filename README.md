@@ -1,4 +1,4 @@
-# AutoSMS_Reply
+# AutoSMS Reply
 <h3>AutoSMS Reply - Android App</h3>
 Trabalho realizado por: Raul Pereira da Silva Nº97332
 
