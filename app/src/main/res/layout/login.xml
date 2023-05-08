@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/loginButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -14,12 +14,12 @@
         android:text="LOG IN"
         app:cornerRadius="5dp"
         app:iconPadding="0dp"
-        app:layout_constraintEnd_toEndOf="@+id/editTextText4"
-        app:layout_constraintStart_toStartOf="@+id/editTextText4"
+        app:layout_constraintEnd_toEndOf="@+id/userPassword"
+        app:layout_constraintStart_toStartOf="@+id/userPassword"
         app:layout_constraintTop_toBottomOf="@+id/title2" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/userEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <EditText
-        android:id="@+id/editTextText4"
+        android:id="@+id/userPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -49,7 +49,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+        app:layout_constraintTop_toBottomOf="@+id/userEmail" />
 
     <View
         android:id="@+id/eclipse"
@@ -150,7 +150,7 @@
         android:translationY="-1.11sp"
         app:layout_constraintEnd_toStartOf="@+id/view2"
         app:layout_constraintStart_toEndOf="@+id/view"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
     <TextView
         android:id="@+id/title2"
@@ -172,13 +172,13 @@
         android:textSize="10sp"
         android:textStyle="bold"
         android:translationY="-1.11sp"
-        app:layout_constraintEnd_toEndOf="@+id/editTextText4"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText4" />
+        app:layout_constraintEnd_toEndOf="@+id/userPassword"
+        app:layout_constraintTop_toBottomOf="@+id/userPassword" />
 
     <View
         android:id="@+id/view"
         android:layout_width="70dp"
-        android:layout_height="100dp"
+        android:layout_height="0dp"
         android:layout_marginStart="100dp"
         android:background="@drawable/dotted_line"
         app:layout_constraintBottom_toBottomOf="@+id/title3"
@@ -188,7 +188,7 @@
     <View
         android:id="@+id/view2"
         android:layout_width="70dp"
-        android:layout_height="100dp"
+        android:layout_height="0dp"
         android:layout_marginEnd="100dp"
         android:background="@drawable/dotted_line"
         app:layout_constraintBottom_toBottomOf="@+id/title3"

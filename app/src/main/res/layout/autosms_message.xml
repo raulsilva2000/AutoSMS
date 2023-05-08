@@ -20,7 +20,7 @@
             android:paddingTop="5dp">
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/openDrawerMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -37,9 +37,9 @@
                 android:text="AutoSMS Message"
                 android:textSize="19sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-                app:layout_constraintStart_toEndOf="@+id/imageView5"
-                app:layout_constraintTop_toTopOf="@+id/imageView5" />
+                app:layout_constraintBottom_toBottomOf="@+id/openDrawerMenu"
+                app:layout_constraintStart_toEndOf="@+id/openDrawerMenu"
+                app:layout_constraintTop_toTopOf="@+id/openDrawerMenu" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
