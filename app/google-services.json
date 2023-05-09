@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "48283288145",
+    "project_id": "autosms-reply",
+    "storage_bucket": "autosms-reply.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48283288145:android:ec504d494ed0a604c7ee70",
+        "android_client_info": {
+          "package_name": "com.example.autosms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48283288145-72citarvli32fbfcmelttcq0c4l2k12t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNFAxP75IHthj_E_MQFOklkF3j5C82fcY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48283288145-72citarvli32fbfcmelttcq0c4l2k12t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

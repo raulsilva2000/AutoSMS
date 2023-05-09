@@ -9,13 +9,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Objects;
 
 public class Login extends AppCompatActivity {
     private EditText userEmail, userPassword;
     private Button loginButton;
+    private TextView clickRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +33,7 @@ public class Login extends AppCompatActivity {
         userEmail = findViewById(R.id.userEmail);
         userPassword = findViewById(R.id.userPassword);
         loginButton = findViewById(R.id.loginButton);
+        clickRegister = findViewById(R.id.clickRegister);
 
         //Click listener on login button
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -42,6 +50,16 @@ public class Login extends AppCompatActivity {
 
                 // calling a method to login our user
                 loginUser(userEmailInput, userPasswordInput);
+            }
+        });
+
+        //Click listener on text to switch to register
+        clickRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Login.this, Register.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

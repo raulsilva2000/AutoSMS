@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class NewAutoSMS extends Fragment {
+public class NewAutoSMSFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

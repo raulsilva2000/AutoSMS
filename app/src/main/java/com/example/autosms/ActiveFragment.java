@@ -2,8 +2,6 @@ package com.example.autosms;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +20,7 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 
-public class Active extends Fragment {
+public class ActiveFragment extends Fragment {
     private RecyclerView.Adapter autoSMSAdapter;
     private RecyclerView recyclerViewReplys;
     DrawerLayout drawerLayout;
@@ -141,28 +138,35 @@ public class Active extends Fragment {
     }
 
     public void dashboard(View view) {
+        //mudar para fragmento
+        /*
         Intent intent = new Intent((MainActivity) getActivity(), MainActivity.class);
-        startActivity(intent);
+        startActivity(intent);*/
+
     }
 
     public void newAutoSMS(View view) {
+        /*
         Intent intent = new Intent((MainActivity) getActivity(), NewAutoSMS.class);
-        startActivity(intent);
+        startActivity(intent);*/
     }
 
     public void sentMessages(View view) {
+        /*
         Intent intent = new Intent((MainActivity) getActivity(), SentMessages.class);
-        startActivity(intent);
+        startActivity(intent);*/
     }
 
     public void editProfile(View view) {
+        /*
         Intent intent = new Intent((MainActivity) getActivity(), MainActivity.class);
-        startActivity(intent);
+        startActivity(intent);*/
     }
 
     public void language(View view) {
+        /*
         Intent intent = new Intent((MainActivity) getActivity(), MainActivity.class);
-        startActivity(intent);
+        startActivity(intent);*/
     }
 
     public void logout(View view) {
