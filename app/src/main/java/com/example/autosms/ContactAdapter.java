@@ -15,59 +15,35 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactAdapter extends ArrayAdapter<String> {
+public class ContactAdapter extends ArrayAdapter<Contact> {
 
-    private Context context;
-    private int resource;
-    private List<String> contacts;
-    private List<String> selectedContacts;
-
-    public ContactAdapter(Context context, int resource, List<String> contacts) {
-        super(context, resource, contacts);
-        this.context = context;
-        this.resource = resource;
-        this.contacts = contacts;
-        this.selectedContacts = new ArrayList<>();
+    public ContactAdapter(Context context, List<Contact> contacts) {
+        super(context, 0, contacts);
     }
 
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ViewHolder viewHolder;
+    public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(resource, parent, false);
-            viewHolder = new ViewHolder();
-            viewHolder.checkBoxContact = convertView.findViewById(R.id.checkbox_contact);
-            viewHolder.textViewContactName = convertView.findViewById(R.id.text_contact_name);
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.contact_item, parent, false);
         }
 
-        String contact = contacts.get(position);
-        viewHolder.textViewContactName.setText(contact);
-        viewHolder.checkBoxContact.setChecked(selectedContacts.contains(contact));
+        final Contact contact = getItem(position);
 
-        viewHolder.checkBoxContact.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        TextView nameTextView = convertView.findViewById(R.id.text_view_name);
+        TextView numberTextView = convertView.findViewById(R.id.text_view_number);
+        CheckBox checkBox = convertView.findViewById(R.id.check_box_contact);
+
+        nameTextView.setText(contact.getName());
+        numberTextView.setText(contact.getNumber());
+        checkBox.setChecked(contact.isSelected());
+
+        checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    selectedContacts.add(contact);
-                } else {
-                    selectedContacts.remove(contact);
-                }
+            public void onClick(View v) {
+                contact.setSelected(((CheckBox) v).isChecked());
             }
         });
 
         return convertView;
-    }
-
-    private static class ViewHolder {
-        CheckBox checkBoxContact;
-        TextView textViewContactName;
-    }
-
-    public List<String> getSelectedContacts() {
-        return selectedContacts;
     }
 }

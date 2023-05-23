@@ -1,14 +1,13 @@
 package com.example.autosms;
 
 public class Contact {
-
     private String name;
-    private String phoneNumber;
+    private String number;
     private boolean selected;
 
-    public Contact(String name, String phoneNumber) {
+    public Contact(String name, String number) {
         this.name = name;
-        this.phoneNumber = phoneNumber;
+        this.number = number;
         this.selected = false;
     }
 
@@ -16,11 +15,15 @@ public class Contact {
         return name;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getNumber() {
+        return number;
     }
 
     public boolean isSelected() {
         return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

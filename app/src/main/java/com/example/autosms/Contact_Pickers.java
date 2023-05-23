@@ -1,27 +1,22 @@
 package com.example.autosms;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Contacts;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -29,100 +24,115 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Contact_Pickers extends Activity {
+    private ArrayList<Contact> contacts;
+    private ContactAdapter contactAdapter;
+    private TextView cancelButton;
+    private Button button_deselect_all;
 
-    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
-
-    private ListView lvContacts;
-    private Button btnConfirm;
-    private Button btnSelectAll;
-    private TextView tvSelectedContacts;
-
-    private List<Contact> contacts;
-    private List<Contact> selectedContacts;
-    private ArrayAdapter<Contact> adapter;
+    private static final int REQUEST_CODE_READ_CONTACTS = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.contact_pickers);
 
-        lvContacts = findViewById(R.id.lvContacts);
-        btnConfirm = findViewById(R.id.btnConfirm);
-        btnSelectAll = findViewById(R.id.btnSelectAll);
-        tvSelectedContacts = findViewById(R.id.tvSelectedContacts);
+        ListView contactsListView = findViewById(R.id.list_view_contacts);
+        Button confirmButton = findViewById(R.id.button_confirm);
+        Button selectAllButton = findViewById(R.id.button_select_all);
+        cancelButton = findViewById(R.id.cancelButton);
+        button_deselect_all = findViewById(R.id.button_deselect_all);
 
         contacts = new ArrayList<>();
-        selectedContacts = new ArrayList<>();
+        contactAdapter = new ContactAdapter(this, contacts);
+        contactsListView.setAdapter(contactAdapter);
 
-        adapter = new ArrayAdapter<>(this, R.layout.list_item_contact, contacts);
-        lvContacts.setAdapter(adapter);
-
-        // Set a click listener for the ListView items
-        lvContacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Get the selected contact
-                Contact contact = (Contact) parent.getItemAtPosition(position);
-
-                // Toggle the selection status of the contact
-                contact.setSelected(!contact.isSelected());
-
-                // Update the list view
-                adapter.notifyDataSetChanged();
-
-                // Update the selected contacts list
-                if (contact.isSelected()) {
-                    selectedContacts.add(contact);
-                } else {
-                    selectedContacts.remove(contact);
-                }
-
-                // Update the selected contacts text view
-                updateSelectedContactsTextView();
-            }
-        });
-
-        // Set a click listener for the Select All button
-        btnSelectAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Toggle the selection status of all contacts
-                for (Contact contact : contacts) {
-                    contact.setSelected(true);
-                    selectedContacts.add(contact);
-                }
-
-                // Update the list view
-                adapter.notifyDataSetChanged();
-
-                // Update the selected contacts text view
-                updateSelectedContactsTextView();
-            }
-        });
-
-        // Set a click listener for the Confirm button
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Do something with the selected contacts
-                String message = "Selected Contacts:";
-                for (Contact contact : selectedContacts) {
-                    message += "\n" + contact.getName() + " (" + contact.getPhoneNumber() + ")";
-                }
-                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // Check if the READ_CONTACTS permission has been granted
+        // Check if the READ_CONTACTS permission is granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
-            // Request the permission
+            // Permission is not granted, request it
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.READ_CONTACTS},
-                    PERMISSIONS_REQUEST_READ_CONTACTS);
+                    REQUEST_CODE_READ_CONTACTS);
         } else {
-            // Permission has already been granted
-            importContacts();
+            // Permission is already granted, proceed with loading contacts
+            loadContacts();
+        }
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StringBuilder selectedNumbers = new StringBuilder();
+                for (Contact contact : contacts) {
+                    if (contact.isSelected()) {
+                        selectedNumbers.append(contact.getNumber()).append(", ");
+                    }
+                }
+                if (selectedNumbers.length() > 0) {
+                    selectedNumbers.setLength(selectedNumbers.length() - 2); // Remove last comma and space
+                }
+
+                Intent intent = new Intent();
+                intent.putExtra("selectedContacts", selectedNumbers.toString());
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        button_deselect_all.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    for (Contact contact : contacts) {
+                        contact.setSelected(true);
+                    }
+                    contactAdapter.notifyDataSetChanged();
+                }
+            });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CODE_READ_CONTACTS) {
+            // Check if the permission is granted
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, proceed with loading contacts
+                loadContacts();
+            } else {
+                // Permission denied, handle accordingly (e.g., show an error message)
+                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
+    private void loadContacts() {
+        // Query the contacts from the device
+        Cursor cursor = getContentResolver().query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+
+        if (cursor != null && cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                String number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                Contact contact = new Contact(name, number);
+                contacts.add(contact);
+            }
+            cursor.close();
+        }
+
+        contactAdapter.notifyDataSetChanged();
+    }
+}
 
