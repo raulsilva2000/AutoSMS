@@ -8,10 +8,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,9 +18,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class Contact_Pickers extends Activity {
+public class SIMCard_Pickers extends Activity {
     private ArrayList<Contact> contacts;
     private ContactAdapter contactAdapter;
     private TextView cancelButton;
@@ -33,7 +29,7 @@ public class Contact_Pickers extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.contact_pickers);
+        setContentView(R.layout.simcard_pickers);
 
         ListView contactsListView = findViewById(R.id.list_view_contacts);
         Button confirmButton = findViewById(R.id.button_confirm);
@@ -85,14 +81,14 @@ public class Contact_Pickers extends Activity {
         });
 
         button_deselect_all.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    for (Contact contact : contacts) {
-                        contact.setSelected(true);
-                    }
-                    contactAdapter.notifyDataSetChanged();
+            @Override
+            public void onClick(View v) {
+                for (Contact contact : contacts) {
+                    contact.setSelected(true);
                 }
-            });
+                contactAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -134,4 +130,3 @@ public class Contact_Pickers extends Activity {
         contactAdapter.notifyDataSetChanged();
     }
 }
-
