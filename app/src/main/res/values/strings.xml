@@ -13,4 +13,9 @@
         <item>All SIM Cards</item>
         <item>Specific Cards</item>
     </string-array>
+
+    <string-array name="spinner_filters_options">
+        <item>First created</item>
+        <item>Last created</item>
+    </string-array>
 </resources>

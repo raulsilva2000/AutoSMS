@@ -34,29 +34,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView"
-                    app:srcCompat="@drawable/filter" />
+                    app:srcCompat="@drawable/filter"
+                    tools:layout_editor_absoluteY="14dp"
+                    tools:ignore="MissingConstraints" />
 
-                <TextView
-                    android:id="@+id/textView"
+                <Spinner
+                    android:id="@+id/spinner_filters"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="First created"
-                    app:layout_constraintBottom_toBottomOf="@+id/searchView1"
+                    android:layout_marginStart="20dp"
+                    android:entries="@array/spinner_filters_options"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView6"
                     app:layout_constraintStart_toEndOf="@+id/imageView6"
-                    app:layout_constraintTop_toTopOf="@+id/searchView1" />
-
-                <ImageView
-                    android:id="@+id/imageView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView"
-                    app:layout_constraintStart_toEndOf="@+id/textView"
-                    app:layout_constraintTop_toTopOf="@+id/textView"
-                    app:srcCompat="@drawable/dropdown" />
+                    app:layout_constraintTop_toTopOf="@+id/imageView6" />
 
                 <SearchView
                     android:id="@+id/searchView1"

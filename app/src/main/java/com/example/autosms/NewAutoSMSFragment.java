@@ -20,7 +20,6 @@ import android.widget.TextView;
 public class NewAutoSMSFragment extends Fragment {
     Spinner spinner;
     TextView selectedContactsNumber;
-
     TextView selectedSIMCards;
     Spinner spinner2;
 

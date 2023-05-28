@@ -1,5 +1,6 @@
 package com.example.autosms;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -10,6 +11,7 @@ public class AutoSMS {
     private ArrayList<String> numbers;
     private String days;
     private String time;
+    private long timestamp;
 
     public AutoSMS(String title, String message, ArrayList<String> simCards, ArrayList<String> numbers, String days, String time) {
         this.title = title;
@@ -18,6 +20,7 @@ public class AutoSMS {
         this.numbers = numbers;
         this.days = days;
         this.time = time;
+        this.timestamp = System.currentTimeMillis();
     }
 
     public String getTitle() {
@@ -66,5 +69,9 @@ public class AutoSMS {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
     }
 }
