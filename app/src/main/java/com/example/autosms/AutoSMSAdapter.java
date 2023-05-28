@@ -1,5 +1,7 @@
 package com.example.autosms;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -20,9 +37,11 @@ import java.util.List;
 public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHolder> {
     List<AutoSMS> replys;
     Context context;
+    private RecyclerView myRecyclerView;
 
-    public AutoSMSAdapter(List<AutoSMS> replys) {
+    public AutoSMSAdapter(List<AutoSMS> replys, Context context) {
         this.replys = replys;
+        this.context = context;
     }
 
     @NonNull
@@ -42,6 +61,7 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
     public int getItemCount() {
         return replys.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView replyTitle;
@@ -81,9 +101,28 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
                     } else if (id == R.id.delete) {
                         // Remove the item at the clicked position from the list
                         if (position != RecyclerView.NO_POSITION) {
-                            replys.remove(position);
-                            notifyItemRemoved(position);
-                            notifyItemRangeChanged(position, replys.size());
+                            //Update JSON file
+                            try {
+                                //delete item in the RecyclerView
+                                replys.remove(position);
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, replys.size());
+
+                                Gson gson = new Gson();
+
+                                // Convert the updated data structure to JSON
+                                String updatedJson = gson.toJson(replys);
+
+                                // Write the updated JSON to the file
+                                FileOutputStream fos = context.openFileOutput("data.json", Context.MODE_PRIVATE);
+                                OutputStreamWriter osw = new OutputStreamWriter(fos);
+                                osw.write(updatedJson);
+                                osw.close();
+                                fos.close();
+                                Log.d("JSON Update", "JSON file updated successfully.");
+                            } catch (IOException e) {
+                                Log.e("JSON Update", "Error updating JSON file: " + e.getMessage());
+                            }
                         }
                         return true;
                     }

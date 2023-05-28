@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -81,8 +82,11 @@ public class ActiveFragment extends Fragment {
 
     private void initRecyclerview(View view){
         try {
+            //First clear replys Array to load again the data from file
+            replys.clear();
+
             // Step 1: Read JSON data from the file
-            InputStream inputStream = getResources().openRawResource(R.raw.data);
+            FileInputStream inputStream = getContext().openFileInput("data.json");
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             StringBuilder jsonData = new StringBuilder();
             String line;
@@ -105,7 +109,7 @@ public class ActiveFragment extends Fragment {
         recyclerViewReplys = view.findViewById(R.id.recyclerView);
         recyclerViewReplys.setLayoutManager(new LinearLayoutManager(getView().getContext(), LinearLayoutManager.VERTICAL, false));
 
-        autoSMSAdapter = new AutoSMSAdapter(replys);
+        autoSMSAdapter = new AutoSMSAdapter(replys, requireContext());
         recyclerViewReplys.setAdapter(autoSMSAdapter);
     }
 
