@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     private ImageView menuIcon;
     private ImageView closeMenu;
-
     private ConstraintLayout homeMenu;
     private ConstraintLayout newAutoSMS;
     private ConstraintLayout messagesMenu;
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                closeDrawer(view);
+                closeDrawer();
             }
         });
 
@@ -154,40 +153,28 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.openDrawer(GravityCompat.START);
     }
 
-    public void closeDrawer(View view){
+    public void closeDrawer(){
         drawerLayout.closeDrawer(GravityCompat.START);
     }
 
     public void dashboard(View view) {
-        //mudar para fragmento
-        /*
-        Intent intent = new Intent((MainActivity) getActivity(), MainActivity.class);
-        startActivity(intent);*/
-
+        showSelectedPage(R.id.active);
     }
 
     public void newAutoSMS(View view) {
-        /*
-        Intent intent = new Intent((MainActivity) getActivity(), NewAutoSMS.class);
-        startActivity(intent);*/
+        showSelectedPage(R.id.autoSMS);
     }
 
     public void sentMessages(View view) {
-        /*
-        Intent intent = new Intent((MainActivity) getActivity(), SentMessages.class);
-        startActivity(intent);*/
+        showSelectedPage(R.id.sent);
     }
 
     public void editProfile(View view) {
-        /*
-        Intent intent = new Intent((MainActivity) getActivity(), MainActivity.class);
-        startActivity(intent);*/
+
     }
 
     public void language(View view) {
-        /*
-        Intent intent = new Intent((MainActivity) getActivity(), MainActivity.class);
-        startActivity(intent);*/
+
     }
 
     public void logout(View view) {
@@ -214,4 +201,21 @@ public class MainActivity extends AppCompatActivity {
 
         builder.show();
     }
+
+    public void showSelectedPage(int id){
+        if(id == R.id.active){
+            updateTextViewTitleHeader("Active Replys");
+            getSupportFragmentManager().beginTransaction().replace(R.id.containerFrame, activeFragment).commit();
+        } else if(id == R.id.autoSMS) {
+            updateTextViewTitleHeader("New AutoSMS Reply");
+            getSupportFragmentManager().beginTransaction().replace(R.id.containerFrame, newAutoSMSFragment).commit();
+        } else if(id == R.id.sent){
+            updateTextViewTitleHeader("Sent Messages");
+            getSupportFragmentManager().beginTransaction().replace(R.id.containerFrame, sentMessagesFragment).commit();
+        }
+
+        bottomNavigationView.setSelectedItemId(id);
+        closeDrawer();
+    }
+
 }
