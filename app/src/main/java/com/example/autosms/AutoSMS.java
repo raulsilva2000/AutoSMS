@@ -3,24 +3,25 @@ package com.example.autosms;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class AutoSMS {
     private String title;
     private String message;
-    private ArrayList<String> simCards;
-    private ArrayList<String> numbers;
+    private List<String> simCards;
+    private List<String> numbers;
     private String days;
     private String time;
     private long timestamp;
 
-    public AutoSMS(String title, String message, ArrayList<String> simCards, ArrayList<String> numbers, String days, String time) {
+    public AutoSMS(String title, String message, List<String> simCards, List<String> numbers, String days, String time, long timestamp) {
         this.title = title;
         this.message = message;
         this.simCards = simCards;
         this.numbers = numbers;
         this.days = days;
         this.time = time;
-        this.timestamp = System.currentTimeMillis();
+        this.timestamp = timestamp;
     }
 
     public String getTitle() {
@@ -39,19 +40,19 @@ public class AutoSMS {
         this.message = message;
     }
 
-    public ArrayList<String> getSimCards() {
+    public List<String> getSimCards() {
         return simCards;
     }
 
-    public void setSimCards(ArrayList<String> simCards) {
+    public void setSimCards(List<String> simCards) {
         this.simCards = simCards;
     }
 
-    public ArrayList<String> getNumbers() {
+    public List<String> getNumbers() {
         return numbers;
     }
 
-    public void setNumbers(ArrayList<String> numbers) {
+    public void setNumbers(List<String> numbers) {
         this.numbers = numbers;
     }
 

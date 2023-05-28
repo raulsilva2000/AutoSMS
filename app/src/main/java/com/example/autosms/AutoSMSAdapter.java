@@ -15,12 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHolder> {
-    ArrayList<AutoSMS> replys;
+    List<AutoSMS> replys;
     Context context;
 
-    public AutoSMSAdapter(ArrayList<AutoSMS> replys) {
+    public AutoSMSAdapter(List<AutoSMS> replys) {
         this.replys = replys;
     }
 
@@ -75,11 +76,9 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
 
                     // Handle menu item clicks here
                     if (id == R.id.edit) {
-                        Log.d("EDIT", "EDITOU");
-                        // Perform edit operation if needed
+                        // Perform edit operation
                         return true;
                     } else if (id == R.id.delete) {
-                        Log.d("DELETE", "ELIMINOU");
                         // Remove the item at the clicked position from the list
                         if (position != RecyclerView.NO_POSITION) {
                             replys.remove(position);

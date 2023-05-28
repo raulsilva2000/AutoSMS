@@ -44,4 +44,6 @@ dependencies {
     // Required only if Facebook login support is required
     // Find the latest Facebook SDK releases here: https://goo.gl/Ce5L94
     implementation 'com.facebook.android:facebook-android-sdk:16.0.1'
+
+    implementation 'com.google.code.gson:gson:2.8.8'
 }

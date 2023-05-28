@@ -24,12 +24,22 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ActiveFragment extends Fragment {
     private AutoSMSAdapter autoSMSAdapter;
     private RecyclerView recyclerViewReplys;
-    private ArrayList<AutoSMS> replys;
+    private List<AutoSMS> replys = new ArrayList<>();
     Spinner sortSpinner;
 
     @Override
@@ -70,78 +80,27 @@ public class ActiveFragment extends Fragment {
     }
 
     private void initRecyclerview(View view){
-        replys = new ArrayList<>();
+        try {
+            // Step 1: Read JSON data from the file
+            InputStream inputStream = getResources().openRawResource(R.raw.data);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder jsonData = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                jsonData.append(line);
+            }
+            reader.close();
 
-        ArrayList<String> simCards = new ArrayList<>();
-        simCards.add("SIM1");
+            // Step 2: Parse JSON data into objects of AutoSMS class
+            Gson gson = new Gson();
+            AutoSMS[] autoSMSArray  = gson.fromJson(jsonData.toString(), AutoSMS[].class);
+            for (AutoSMS reply: autoSMSArray){
+                replys.add(new AutoSMS(reply.getTitle(), reply.getMessage(), reply.getSimCards(), reply.getNumbers(), reply.getDays(), reply.getTime(), reply.getTimestamp()));
+            }
 
-        ArrayList<String> numbers = new ArrayList<>();
-        numbers.add("+351937309155");
-        numbers.add("+351937309155");
-        numbers.add("+351937309155");
-
-        replys.add(new AutoSMS("For all my contacts1",
-                "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
-                simCards,
-                numbers,
-                "1",
-                "1"));
-
-        replys.add(new AutoSMS("For all my contacts2",
-                "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
-                simCards,
-                numbers,
-                "1",
-                "1"));
-
-        replys.add(new AutoSMS("For all my contacts3",
-                "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
-                simCards,
-                numbers,
-                "1",
-                "1"));
-
-        replys.add(new AutoSMS("For all my contacts4",
-                "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
-                simCards,
-                numbers,
-                "1",
-                "1"));
-
-        replys.add(new AutoSMS("For all my contacts5",
-                "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
-                simCards,
-                numbers,
-                "1",
-                "1"));
-
-        replys.add(new AutoSMS("For all my contacts6",
-                "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
-                simCards,
-                numbers,
-                "1",
-                "1"));
-
-        replys.add(new AutoSMS("For all my contacts7",
-                "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
-                simCards,
-                numbers,
-                "1",
-                "1"));
-
-        replys.add(new AutoSMS("For all my contacts8",
-                "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
-                simCards,
-                numbers,
-                "1",
-                "1"));
-
-        replys.add(new AutoSMS("For all my contacts9",
-                "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
-                simCards,
-                numbers,
-                "1",
-                "1"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         recyclerViewReplys = view.findViewById(R.id.recyclerView);
         recyclerViewReplys.setLayoutManager(new LinearLayoutManager(getView().getContext(), LinearLayoutManager.VERTICAL, false));
