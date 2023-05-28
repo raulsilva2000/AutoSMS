@@ -30,7 +30,7 @@
                 app:srcCompat="@drawable/arrow_left" />
 
             <TextView
-                android:id="@+id/textViewTitle"
+                android:id="@+id/textViewTitleHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="80dp"
@@ -49,9 +49,9 @@
                 android:layout_marginEnd="10dp"
                 android:text="CANCEL"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/textViewTitle"
+                app:layout_constraintBottom_toBottomOf="@+id/textViewTitleHeader"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textViewTitle" />
+                app:layout_constraintTop_toTopOf="@+id/textViewTitleHeader" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
