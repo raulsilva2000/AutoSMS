@@ -1,21 +1,22 @@
 package com.example.autosms;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.GenericLifecycleObserver;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
-public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHolder>{
+public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHolder> {
     ArrayList<AutoSMS> replys;
     Context context;
 
@@ -33,8 +34,7 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        /* Aqui faz a correspondencia */
-        holder.replyTitle.setText(replys.get(position).getTitle());
+        holder.bind(position);
     }
 
     @Override
@@ -42,18 +42,57 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
         return replys.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView replyTitle;
-        TextView replyDays;
-        TextView replyNumbers;
-        TextView replyTime;
+        ImageView replyOptions;
+        int position;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            replyTitle=itemView.findViewById(R.id.textViewReplyTitle);
-            replyDays=itemView.findViewById(R.id.textViewReplyDays);
-            replyNumbers=itemView.findViewById(R.id.textViewReplyNumbers);
-            replyTime=itemView.findViewById(R.id.textViewReplyTime);
+            replyTitle = itemView.findViewById(R.id.textViewReplyTitle);
+            replyOptions = itemView.findViewById(R.id.imageViewReplyOptions);
+
+            replyOptions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showPopupMenu(view);
+                }
+            });
+        }
+
+        public void bind(int position) {
+            this.position = position;
+            replyTitle.setText(replys.get(position).getTitle());
+        }
+
+        private void showPopupMenu(View anchorView) {
+            PopupMenu popupMenu = new PopupMenu(context, anchorView);
+            popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    int id = item.getItemId();
+
+                    // Handle menu item clicks here
+                    if (id == R.id.edit) {
+                        Log.d("EDIT", "EDITOU");
+                        // Perform edit operation if needed
+                        return true;
+                    } else if (id == R.id.delete) {
+                        Log.d("DELETE", "ELIMINOU");
+                        // Remove the item at the clicked position from the list
+                        if (position != RecyclerView.NO_POSITION) {
+                            replys.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, replys.size());
+                        }
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            popupMenu.show();
         }
     }
 

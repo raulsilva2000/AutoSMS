@@ -80,63 +80,63 @@ public class ActiveFragment extends Fragment {
         numbers.add("+351937309155");
         numbers.add("+351937309155");
 
-        replys.add(new AutoSMS("For all my contacts",
+        replys.add(new AutoSMS("For all my contacts1",
                 "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
                 simCards,
                 numbers,
                 "1",
                 "1"));
 
-        replys.add(new AutoSMS("For all my contacts",
+        replys.add(new AutoSMS("For all my contacts2",
                 "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
                 simCards,
                 numbers,
                 "1",
                 "1"));
 
-        replys.add(new AutoSMS("For all my contacts",
+        replys.add(new AutoSMS("For all my contacts3",
                 "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
                 simCards,
                 numbers,
                 "1",
                 "1"));
 
-        replys.add(new AutoSMS("For all my contacts",
+        replys.add(new AutoSMS("For all my contacts4",
                 "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
                 simCards,
                 numbers,
                 "1",
                 "1"));
 
-        replys.add(new AutoSMS("For all my contacts",
+        replys.add(new AutoSMS("For all my contacts5",
                 "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
                 simCards,
                 numbers,
                 "1",
                 "1"));
 
-        replys.add(new AutoSMS("For all my contacts",
+        replys.add(new AutoSMS("For all my contacts6",
                 "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
                 simCards,
                 numbers,
                 "1",
                 "1"));
 
-        replys.add(new AutoSMS("For all my contacts",
+        replys.add(new AutoSMS("For all my contacts7",
                 "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
                 simCards,
                 numbers,
                 "1",
                 "1"));
 
-        replys.add(new AutoSMS("For all my contacts",
+        replys.add(new AutoSMS("For all my contacts8",
                 "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
                 simCards,
                 numbers,
                 "1",
                 "1"));
 
-        replys.add(new AutoSMS("For all my contacts",
+        replys.add(new AutoSMS("For all my contacts9",
                 "Obrigado por entrar em contacto. De momento não me encontro disponível. Irei ligar-lhe de volta assim que possível.",
                 simCards,
                 numbers,
