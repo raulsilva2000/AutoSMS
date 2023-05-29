@@ -20,8 +20,8 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 
 public class SIMCard_Pickers extends Activity {
-    private ArrayList<Contact> contacts;
-    private ContactAdapter contactAdapter;
+    private ArrayList<SIMCard> simCards;
+    private SIMCardAdapter simCardAdapter;
     private TextView cancelButton;
     private Button button_deselect_all;
     private static final int REQUEST_CODE_READ_CONTACTS = 1;
@@ -31,15 +31,15 @@ public class SIMCard_Pickers extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.simcard_pickers);
 
-        ListView contactsListView = findViewById(R.id.list_view_contacts);
+        ListView simCardsListView = findViewById(R.id.list_view_simCards);
         Button confirmButton = findViewById(R.id.button_confirm);
         Button selectAllButton = findViewById(R.id.button_select_all);
         cancelButton = findViewById(R.id.cancelButton);
         button_deselect_all = findViewById(R.id.button_deselect_all);
 
-        contacts = new ArrayList<>();
-        contactAdapter = new ContactAdapter(this, contacts);
-        contactsListView.setAdapter(contactAdapter);
+        simCards = new ArrayList<>();
+        simCardAdapter = new SIMCardAdapter(this, simCards);
+        simCardsListView.setAdapter(simCardAdapter);
 
         // Check if the READ_CONTACTS permission is granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
@@ -56,18 +56,18 @@ public class SIMCard_Pickers extends Activity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StringBuilder selectedNumbers = new StringBuilder();
-                for (Contact contact : contacts) {
-                    if (contact.isSelected()) {
-                        selectedNumbers.append(contact.getNumber()).append(", ");
+                StringBuilder selectedSimCards = new StringBuilder();
+                for (SIMCard simCard : simCards) {
+                    if (simCard.isSelected()) {
+                        selectedSimCards.append(simCard.getNumber()).append(", ");
                     }
                 }
-                if (selectedNumbers.length() > 0) {
-                    selectedNumbers.setLength(selectedNumbers.length() - 2); // Remove last comma and space
+                if (selectedSimCards.length() > 0) {
+                    selectedSimCards.setLength(selectedSimCards.length() - 2); // Remove last comma and space
                 }
 
                 Intent intent = new Intent();
-                intent.putExtra("selectedContacts", selectedNumbers.toString());
+                intent.putExtra("selectedSimCards", selectedSimCards.toString());
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -83,10 +83,10 @@ public class SIMCard_Pickers extends Activity {
         button_deselect_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (Contact contact : contacts) {
-                    contact.setSelected(true);
+                for (SIMCard simCard : simCards) {
+                    simCard.setSelected(true);
                 }
-                contactAdapter.notifyDataSetChanged();
+                simCardAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -121,12 +121,12 @@ public class SIMCard_Pickers extends Activity {
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 String number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                Contact contact = new Contact(name, number);
-                contacts.add(contact);
+                SIMCard simCard = new SIMCard(name, number);
+                simCards.add(simCard);
             }
             cursor.close();
         }
 
-        contactAdapter.notifyDataSetChanged();
+        simCardAdapter.notifyDataSetChanged();
     }
 }

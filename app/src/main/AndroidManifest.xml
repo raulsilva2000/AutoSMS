@@ -38,12 +38,10 @@
         <activity
             android:name=".Contact_Pickers"
             android:exported="true">
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
+        </activity>
+        <activity
+            android:name=".SIMCard_Pickers"
+            android:exported="true">
         </activity>
     </application>
 

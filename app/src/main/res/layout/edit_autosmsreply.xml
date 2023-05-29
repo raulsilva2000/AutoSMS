@@ -69,7 +69,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editTextText2"
+                android:id="@+id/editTextNewTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -99,7 +99,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editTextText3"
+                android:id="@+id/editTextNewMessage"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginStart="10dp"
@@ -228,7 +228,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView6">
 
                 <CheckBox
-                    android:id="@+id/checkBox6"
+                    android:id="@+id/checkBoxNewMon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -239,7 +239,7 @@
                     android:textAlignment="center" />
 
                 <CheckBox
-                    android:id="@+id/checkBox5"
+                    android:id="@+id/checkBoxNewTue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -249,7 +249,7 @@
                     android:textAlignment="center" />
 
                 <CheckBox
-                    android:id="@+id/checkBox4"
+                    android:id="@+id/checkBoxNewWed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -259,7 +259,7 @@
                     android:textAlignment="center" />
 
                 <CheckBox
-                    android:id="@+id/checkBox3"
+                    android:id="@+id/checkBoxNewThu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -269,7 +269,7 @@
                     android:textAlignment="center" />
 
                 <CheckBox
-                    android:id="@+id/checkBox7"
+                    android:id="@+id/checkBoxNewFri"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -279,7 +279,7 @@
                     android:textAlignment="center" />
 
                 <CheckBox
-                    android:id="@+id/checkBox8"
+                    android:id="@+id/checkBoxNewSat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -289,7 +289,7 @@
                     android:textAlignment="center" />
 
                 <CheckBox
-                    android:id="@+id/checkBox9"
+                    android:id="@+id/checkBoxNewSun"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -382,7 +382,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonNewCreate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"

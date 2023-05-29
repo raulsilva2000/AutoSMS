@@ -41,7 +41,7 @@
 
 
     <ListView
-        android:id="@+id/list_view_contacts"
+        android:id="@+id/list_view_simCards"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"

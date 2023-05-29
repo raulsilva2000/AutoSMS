@@ -193,7 +193,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editTextText3"
+                android:id="@+id/editTextNewMessage"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginStart="10dp"
@@ -220,7 +220,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonNewCreate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -247,6 +247,6 @@
         app:iconPadding="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonNewCreate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

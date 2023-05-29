@@ -51,7 +51,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <EditText
-                            android:id="@+id/editTextText2"
+                            android:id="@+id/editTextNewTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
@@ -81,7 +81,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <EditText
-                            android:id="@+id/editTextText3"
+                            android:id="@+id/editTextNewMessage"
                             android:layout_width="match_parent"
                             android:layout_height="150dp"
                             android:layout_marginStart="10dp"
@@ -133,8 +133,27 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="20dp">
+
+                        <Button
+                            android:id="@+id/buttonNewAddCards"
+                            android:layout_width="50dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="5dp"
+                            android:backgroundTint="#38B6FF"
+                            android:padding="0dp"
+                            android:paddingLeft="0dp"
+                            android:paddingTop="0dp"
+                            android:paddingRight="0dp"
+                            android:paddingBottom="0dp"
+                            android:text="Add"
+                            android:visibility="invisible"
+                            app:cornerRadius="5dp"
+                            app:iconPadding="0dp"
+                            app:iconSize="18dp"
+                            app:layout_constraintStart_toEndOf="@+id/spinnerSimCards"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/textViewSIMCard"
@@ -146,10 +165,10 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <Spinner
-                            android:id="@+id/spinner2"
+                            android:id="@+id/spinnerSimCards"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
+                            android:layout_marginStart="10dp"
                             android:entries="@array/spinner2_options"
                             app:layout_constraintBottom_toBottomOf="@+id/textViewSIMCard"
                             app:layout_constraintStart_toEndOf="@+id/textViewSIMCard"
@@ -162,15 +181,34 @@
                             android:layout_marginStart="20dp"
                             android:editable="false"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="@+id/spinner2"
-                            app:layout_constraintTop_toBottomOf="@+id/spinner2" />
+                            app:layout_constraintStart_toStartOf="@+id/spinnerSimCards"
+                            app:layout_constraintTop_toBottomOf="@+id/spinnerSimCards" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="20dp">
+
+                        <Button
+                            android:id="@+id/buttonNewAddContacts"
+                            android:layout_width="50dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="5dp"
+                            android:backgroundTint="#38B6FF"
+                            android:padding="0dp"
+                            android:paddingLeft="0dp"
+                            android:paddingTop="0dp"
+                            android:paddingRight="0dp"
+                            android:paddingBottom="0dp"
+                            android:text="Add"
+                            android:visibility="invisible"
+                            app:cornerRadius="5dp"
+                            app:iconPadding="0dp"
+                            app:iconSize="18dp"
+                            app:layout_constraintStart_toEndOf="@+id/spinnerNumbers"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/textView80"
@@ -182,10 +220,10 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <Spinner
-                            android:id="@+id/spinner"
+                            android:id="@+id/spinnerNumbers"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
+                            android:layout_marginStart="10dp"
                             android:entries="@array/spinner_options"
                             app:layout_constraintBottom_toBottomOf="@+id/textView80"
                             app:layout_constraintStart_toEndOf="@+id/textView80"
@@ -199,8 +237,8 @@
                             android:layout_marginStart="20dp"
                             android:editable="false"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="@+id/spinner"
-                            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+                            app:layout_constraintStart_toStartOf="@+id/spinnerNumbers"
+                            app:layout_constraintTop_toBottomOf="@+id/spinnerNumbers" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -231,7 +269,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/textViewNew">
 
                             <CheckBox
-                                android:id="@+id/checkBox6"
+                                android:id="@+id/checkBoxNewMon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -242,7 +280,7 @@
                                 android:textAlignment="center" />
 
                             <CheckBox
-                                android:id="@+id/checkBox5"
+                                android:id="@+id/checkBoxNewTue"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -252,7 +290,7 @@
                                 android:textAlignment="center" />
 
                             <CheckBox
-                                android:id="@+id/checkBox4"
+                                android:id="@+id/checkBoxNewWed"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -262,7 +300,7 @@
                                 android:textAlignment="center" />
 
                             <CheckBox
-                                android:id="@+id/checkBox3"
+                                android:id="@+id/checkBoxNewThu"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -272,7 +310,7 @@
                                 android:textAlignment="center" />
 
                             <CheckBox
-                                android:id="@+id/checkBox7"
+                                android:id="@+id/checkBoxNewFri"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -282,7 +320,7 @@
                                 android:textAlignment="center" />
 
                             <CheckBox
-                                android:id="@+id/checkBox8"
+                                android:id="@+id/checkBoxNewSat"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -292,7 +330,7 @@
                                 android:textAlignment="center" />
 
                             <CheckBox
-                                android:id="@+id/checkBox9"
+                                android:id="@+id/checkBoxNewSun"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -384,7 +422,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/buttonNewCreate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"

@@ -10,10 +10,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class SIMCardAdapter extends ArrayAdapter<Contact> {
+public class SIMCardAdapter extends ArrayAdapter<SIMCard> {
 
-    public SIMCardAdapter(Context context, List<Contact> contacts) {
-        super(context, 0, contacts);
+    public SIMCardAdapter(Context context, List<SIMCard> simCards) {
+        super(context, 0, simCards);
     }
 
     @Override
@@ -22,20 +22,20 @@ public class SIMCardAdapter extends ArrayAdapter<Contact> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.simcard_item, parent, false);
         }
 
-        final Contact contact = getItem(position);
+        final SIMCard simCard = getItem(position);
 
         TextView nameTextView = convertView.findViewById(R.id.text_view_name);
         TextView numberTextView = convertView.findViewById(R.id.text_view_number);
         CheckBox checkBox = convertView.findViewById(R.id.check_box_contact);
 
-        nameTextView.setText(contact.getName());
-        numberTextView.setText(contact.getNumber());
-        checkBox.setChecked(contact.isSelected());
+        nameTextView.setText(simCard.getName());
+        numberTextView.setText(simCard.getNumber());
+        checkBox.setChecked(simCard.isSelected());
 
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                contact.setSelected(((CheckBox) v).isChecked());
+                simCard.setSelected(((CheckBox) v).isChecked());
             }
         });
 

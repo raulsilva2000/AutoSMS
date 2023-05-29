@@ -97,6 +97,51 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
                     // Handle menu item clicks here
                     if (id == R.id.edit) {
                         // Perform edit operation
+                        /*
+                        try {
+                            FileInputStream fileInputStream = getContext().openFileInput("data.json");
+                            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
+                            StringBuilder stringBuilder = new StringBuilder();
+                            String line;
+
+                            while ((line = bufferedReader.readLine()) != null) {
+                                stringBuilder.append(line).append("\n");
+                            }
+
+                            bufferedReader.close();
+                            String json = stringBuilder.toString();
+
+                            JSONArray jsonArray = new JSONArray(json);
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                // Access and modify the key-value pairs of each object
+                                String value = jsonObject.getString("key");
+                                // Modify the value or perform any other operations
+
+                                // Update the modified value
+                                jsonObject.put("key", "new value");
+
+                                // If you want to remove a key from the object, use the following:
+                                // jsonObject.remove("key");
+
+                                // If you want to add a new key-value pair, use the following:
+                                // jsonObject.put("new_key", "new_value");
+                                // jsonObject.put("days", new JSONArray("[true, true, true, true, true, false, false]"));
+                            }
+
+                            // Convert the modified JSON array back to a string
+                            String modifiedJson = jsonArray.toString();
+
+                            // Write the modified JSON back to the file
+                            FileOutputStream fileOutputStream = openFileOutput("your_file_name.json", Context.MODE_PRIVATE);
+                            fileOutputStream.write(modifiedJson.getBytes());
+                            fileOutputStream.close();
+                        } catch (JSONException | IOException e) {
+                            e.printStackTrace();
+                        }
+                         */
                         return true;
                     } else if (id == R.id.delete) {
                         // Remove the item at the clicked position from the list

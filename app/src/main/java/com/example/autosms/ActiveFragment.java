@@ -1,6 +1,7 @@
 package com.example.autosms;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,9 +27,14 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -80,11 +86,11 @@ public class ActiveFragment extends Fragment {
         });
     }
 
-    private void initRecyclerview(View view){
-        try {
-            //First clear replys Array to load again the data from file
-            replys.clear();
+    private void initRecyclerview(View view) {
+        //First clear replys Array to load again the data from file
+        replys.clear();
 
+        try {
             // Step 1: Read JSON data from the file
             FileInputStream inputStream = getContext().openFileInput("data.json");
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -97,13 +103,15 @@ public class ActiveFragment extends Fragment {
 
             // Step 2: Parse JSON data into objects of AutoSMS class
             Gson gson = new Gson();
-            AutoSMS[] autoSMSArray  = gson.fromJson(jsonData.toString(), AutoSMS[].class);
-            for (AutoSMS reply: autoSMSArray){
+            AutoSMS[] autoSMSArray = gson.fromJson(jsonData.toString(), AutoSMS[].class);
+            for (AutoSMS reply : autoSMSArray) {
                 replys.add(new AutoSMS(reply.getTitle(), reply.getMessage(), reply.getSimCards(), reply.getNumbers(), reply.getDays(), reply.getTime(), reply.getTimestamp()));
             }
 
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         recyclerViewReplys = view.findViewById(R.id.recyclerView);
