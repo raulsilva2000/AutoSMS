@@ -2,11 +2,15 @@ package com.example.autosms;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -18,13 +22,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SIMCard_Pickers extends Activity {
     private ArrayList<SIMCard> simCards;
     private SIMCardAdapter simCardAdapter;
     private TextView cancelButton;
     private Button button_deselect_all;
-    private static final int REQUEST_CODE_READ_CONTACTS = 1;
+    private static final int REQUEST_CODE_READ_SIM_CARDS = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +47,14 @@ public class SIMCard_Pickers extends Activity {
         simCardsListView.setAdapter(simCardAdapter);
 
         // Check if the READ_CONTACTS permission is granted
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted, request it
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_CONTACTS},
-                    REQUEST_CODE_READ_CONTACTS);
+                    new String[]{Manifest.permission.READ_PHONE_STATE},
+                    REQUEST_CODE_READ_SIM_CARDS);
         } else {
-            // Permission is already granted, proceed with loading contacts
-            loadContacts();
+            // Permission is already granted, proceed with loading SIM cards
+            loadSIMCards();
         }
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -94,11 +98,11 @@ public class SIMCard_Pickers extends Activity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CODE_READ_CONTACTS) {
+        if (requestCode == REQUEST_CODE_READ_SIM_CARDS) {
             // Check if the permission is granted
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, proceed with loading contacts
-                loadContacts();
+                // Permission granted, proceed with loading Cards
+                loadSIMCards();
             } else {
                 // Permission denied, handle accordingly (e.g., show an error message)
                 Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
@@ -106,27 +110,26 @@ public class SIMCard_Pickers extends Activity {
         }
     }
 
-    private void loadContacts() {
-        // Query the contacts from the device
-        Cursor cursor = getContentResolver().query(
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                null,
-                null,
-                null,
-                null
-        );
+    private void loadSIMCards() {
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephonyManager != null) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                List<SubscriptionInfo> subscriptionInfoList = SubscriptionManager.from(this).getActiveSubscriptionInfoList();
+                if (subscriptionInfoList != null) {
+                    for (SubscriptionInfo subscriptionInfo : subscriptionInfoList) {
+                        String number = subscriptionInfo.getNumber();
+                        String displayName = subscriptionInfo.getDisplayName().toString();
 
-        if (cursor != null && cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                String number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                SIMCard simCard = new SIMCard(name, number);
-                simCards.add(simCard);
+                        SIMCard simCard = new SIMCard(displayName, number);
+                        simCards.add(simCard);
+                    }
+                    simCardAdapter.notifyDataSetChanged();
+                }
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_PHONE_STATE},
+                        REQUEST_CODE_READ_SIM_CARDS);
             }
-            cursor.close();
         }
-
-        simCardAdapter.notifyDataSetChanged();
     }
 }

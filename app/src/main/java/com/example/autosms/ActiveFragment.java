@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -90,8 +91,22 @@ public class ActiveFragment extends Fragment {
         //First clear replys Array to load again the data from file
         replys.clear();
 
+        // Step 1: Check if "data.json" file exists
+        File file = new File(getContext().getFilesDir(), "data.json");
+        if (!file.exists()) {
+            // File doesn't exist, create it with an empty array
+            try {
+                FileOutputStream outputStream = getContext().openFileOutput("data.json", Context.MODE_PRIVATE);
+                outputStream.write("[]".getBytes());
+                outputStream.close();
+                Log.d("JSON File", "data.json created successfully.");
+            } catch (IOException e) {
+                Log.e("JSON File", "Error creating data.json file: " + e.getMessage());
+            }
+        }
+
         try {
-            // Step 1: Read JSON data from the file
+            // Step 2: Read JSON data from the file
             FileInputStream inputStream = getContext().openFileInput("data.json");
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             StringBuilder jsonData = new StringBuilder();
@@ -105,7 +120,7 @@ public class ActiveFragment extends Fragment {
             Gson gson = new Gson();
             AutoSMS[] autoSMSArray = gson.fromJson(jsonData.toString(), AutoSMS[].class);
             for (AutoSMS reply : autoSMSArray) {
-                replys.add(new AutoSMS(reply.getTitle(), reply.getMessage(), reply.getSimCards(), reply.getNumbers(), reply.getDays(), reply.getTime(), reply.getTimestamp()));
+                replys.add(new AutoSMS(reply.getTitle(), reply.getMessage(), reply.getSimCards(), reply.getNumbers(), reply.getDays(), reply.getTimeFrom(), reply.getTimeTo(), reply.getTimestamp()));
             }
 
         } catch (FileNotFoundException e) {

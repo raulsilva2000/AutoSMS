@@ -12,16 +12,18 @@ public class AutoSMS {
     private List<String> simCards;
     private List<String> numbers;
     private Boolean[] days;
-    private String time;
+    private String timeFrom;
+    private String timeTo;
     private long timestamp;
 
-    public AutoSMS(String title, String message, List<String> simCards, List<String> numbers, Boolean[] days, String time, long timestamp) {
+    public AutoSMS(String title, String message, List<String> simCards, List<String> numbers, Boolean[] days, String timeFrom, String timeTo, long timestamp) {
         this.title = title;
         this.message = message;
         this.simCards = simCards;
         this.numbers = numbers;
         this.days = days;
-        this.time = time;
+        this.timeFrom = timeFrom;
+        this.timeTo = timeTo;
         this.timestamp = timestamp;
     }
 
@@ -65,15 +67,28 @@ public class AutoSMS {
         this.days = days;
     }
 
-    public String getTime() {
-        return time;
+    public String getTimeFrom() {
+        return timeFrom;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setTimeFrom(String timeFrom) {
+        this.timeFrom = timeFrom;
+    }
+
+    public String getTimeTo() {
+        return timeTo;
+    }
+
+    public void setTimeTo(String timeTo) {
+        this.timeTo = timeTo;
     }
 
     public long getTimestamp() {
         return timestamp;
     }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
 }

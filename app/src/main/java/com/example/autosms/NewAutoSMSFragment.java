@@ -17,8 +17,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -61,10 +63,11 @@ public class NewAutoSMSFragment extends Fragment {
     String totalSelectedCards;
     List<String> selectedSimCardsList;
     List<String> selectedNumbersList;
-
-    private ActivityResultLauncher<Intent> launcher;
-
-    private int selectedSpinnerPosition = 0; // Store the selected position here
+    TimePicker timePickerFrom;
+    TimePicker timePickerTo;
+    ActivityResultLauncher<Intent> launcher;
+    String timeFrom;
+    String timeTo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,6 +101,13 @@ public class NewAutoSMSFragment extends Fragment {
         addSimCards = view.findViewById(R.id.buttonNewAddCards);
         addContacts = view.findViewById(R.id.buttonNewAddContacts);
 
+        timePickerFrom = view.findViewById(R.id.timePickerFrom);
+        timePickerTo = view.findViewById(R.id.timePickerTo);
+
+        // Configure the TimePicker
+        timePickerFrom.setIs24HourView(true); // Set to 24-hour mode
+        timePickerTo.setIs24HourView(true); // Set to 24-hour mode
+
         buttonNewCreate = view.findViewById(R.id.buttonNewCreate);
 
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -106,24 +116,32 @@ public class NewAutoSMSFragment extends Fragment {
                         Intent data = result.getData();
                         if (data != null && data.hasExtra("selectedContacts")) {
                             String resultData = data.getStringExtra("selectedContacts");
+                            Log.d("DADOS DO resultData", resultData);
+                            if(!resultData.isEmpty()){
+                                phoneNumbers = resultData.split(", ");
+                                String totalSelected = phoneNumbers.length + " selected";
 
-                            phoneNumbers = resultData.split(", ");
-                            String totalSelected = phoneNumbers.length + " selected";
+                                totalSelectedContacts = totalSelected;
+                                selectedContactsNumber.setText(totalSelected);
+                                selectedNumbersList = Arrays.asList(phoneNumbers);
+                            } else{
+                                selectedContactsNumber.setText(getString(R.string.none_selected));
+                                selectedNumbersList = null;
+                            }
 
-                            totalSelectedContacts = totalSelected;
-                            selectedContactsNumber.setText(totalSelected);
-                            selectedNumbersList = Arrays.asList(phoneNumbers);
                         } else if (data != null && data.hasExtra("selectedSimCards")) {
-                            String resultData = data.getStringExtra("selectedCards");
-                            if(resultData == null){
-                                Toast.makeText(getContext(), "NO DATA", Toast.LENGTH_SHORT).show();
-                            } else {
+                            String resultData = data.getStringExtra("selectedSimCards");
+
+                            if(!resultData.isEmpty()) {
                                 simCards = resultData.split(", ");
                                 String totalSelected = simCards.length + " selected";
 
                                 totalSelectedCards = totalSelected;
                                 selectedSIMCards.setText(totalSelected);
                                 selectedSimCardsList = Arrays.asList(simCards);
+                            } else {
+                                selectedSIMCards.setText(getString(R.string.none_selected));
+                                selectedSimCardsList = null;
                             }
                         }
                     }
@@ -231,13 +249,17 @@ public class NewAutoSMSFragment extends Fragment {
                         days[6] = true;
                     }
 
+                    timeFrom = String.valueOf(timePickerFrom.getHour()) + timePickerFrom.getMinute();
+                    timeTo = String.valueOf(timePickerTo.getHour()) + timePickerTo.getMinute();
+
                     // Update the data structure (e.g., add, remove, or modify elements)
                     replys.add(new AutoSMS(title.getText().toString(),
                             message.getText().toString(),
                             Arrays.asList(simCards),
                             Arrays.asList(phoneNumbers),
                             days,
-                            "",
+                            timeFrom,
+                            timeTo,
                             System.currentTimeMillis()));
 
                     // Convert the updated data structure to JSON
