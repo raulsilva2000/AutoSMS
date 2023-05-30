@@ -31,6 +31,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -65,12 +66,18 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView replyTitle;
+        TextView replyDays;
+        TextView replyNumbers;
+        TextView replyTime;
         ImageView replyOptions;
         int position;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             replyTitle = itemView.findViewById(R.id.textViewReplyTitle);
+            replyDays = itemView.findViewById(R.id.textViewReplyDays);
+            replyNumbers = itemView.findViewById(R.id.textViewReplyNumbers);
+            replyTime = itemView.findViewById(R.id.textViewReplyTime);
             replyOptions = itemView.findViewById(R.id.imageViewReplyOptions);
 
             replyOptions.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +90,56 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
 
         public void bind(int position) {
             this.position = position;
+            //Atribuicao do titulo
             replyTitle.setText(replys.get(position).getTitle());
+
+            //Atribuicao dos dias
+            StringBuilder replyDaysText = new StringBuilder();
+            if(Arrays.equals(replys.get(position).getDays(), new Boolean[]{true, true, true, true, true, true, true})){
+                replyDaysText.append("Every day");
+                replyDays.setText(replyDaysText);
+            } else if (Arrays.equals(replys.get(position).getDays(), new Boolean[]{true, true, true, true, true, false, false})){
+                replyDaysText.append("Week days");
+                replyDays.setText(replyDaysText);
+            } else if (Arrays.equals(replys.get(position).getDays(), new Boolean[]{false, false, false, false, false, true, true})) {
+                replyDaysText.append("Weekend days");
+                replyDays.setText(replyDaysText);
+            } else {
+                int i=0;
+                for(Boolean value : replys.get(position).getDays()){
+                    if(i==0 && value.equals(true)){
+                        replyDaysText.append("Mon./");
+                    } else if (i==1 && value.equals(true)) {
+                        replyDaysText.append("Tue./");
+                    } else if (i==2 && value.equals(true)) {
+                        replyDaysText.append("Wed./");
+                    } else if (i==3 && value.equals(true)) {
+                        replyDaysText.append("Thu./");
+                    } else if (i==4 && value.equals(true)) {
+                        replyDaysText.append("Fri./");
+                    } else if (i==5 && value.equals(true)) {
+                        replyDaysText.append("Sat./");
+                    } else if (i==6 && value.equals(true)) {
+                        replyDaysText.append("Sun./");
+                    }
+                    i++;
+                }
+                replyDays.setText(replyDaysText.substring(0, replyDaysText.length() - 2));
+            }
+
+            //Atribuicao do total de numeros
+            if(replys.get(position).getNumbers().size() == 1){
+                String totalNumbers = String.valueOf(replys.get(position).getNumbers().size()) + " number";
+                replyNumbers.setText(totalNumbers);
+            } else {
+                String totalNumbers = String.valueOf(replys.get(position).getNumbers().size()) + " numbers";
+                replyNumbers.setText(totalNumbers);
+            }
+
+            //Atribuicao do tempo
+            String timeFromTo = replys.get(position).getTimeFrom() + " to " + replys.get(position).getTimeTo();
+            replyTime.setText(timeFromTo);
+
         }
 
         private void showPopupMenu(View anchorView) {

@@ -123,8 +123,6 @@ public class ActiveFragment extends Fragment {
                 replys.add(new AutoSMS(reply.getTitle(), reply.getMessage(), reply.getSimCards(), reply.getNumbers(), reply.getDays(), reply.getTimeFrom(), reply.getTimeTo(), reply.getTimestamp()));
             }
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

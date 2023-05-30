@@ -1,6 +1,5 @@
 package com.example.autosms;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -26,19 +24,16 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.w3c.dom.Text;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class NewAutoSMSFragment extends Fragment {
     EditText title;
@@ -75,15 +70,6 @@ public class NewAutoSMSFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        // Reset the values in your fragment here
-        //spinnerSimCards.setSelection(0);
-        //spinnerNumbers.setSelection(0);
-        // Reset other views and variables as needed
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -101,6 +87,14 @@ public class NewAutoSMSFragment extends Fragment {
         addSimCards = view.findViewById(R.id.buttonNewAddCards);
         addContacts = view.findViewById(R.id.buttonNewAddContacts);
 
+        checkBoxNewMon = view.findViewById(R.id.checkBoxNewMon);
+        checkBoxNewTue = view.findViewById(R.id.checkBoxNewTue);
+        checkBoxNewWed = view.findViewById(R.id.checkBoxNewWed);
+        checkBoxNewThu = view.findViewById(R.id.checkBoxNewThu);
+        checkBoxNewFri = view.findViewById(R.id.checkBoxNewFri);
+        checkBoxNewSat = view.findViewById(R.id.checkBoxNewSat);
+        checkBoxNewSun = view.findViewById(R.id.checkBoxNewSun);
+
         timePickerFrom = view.findViewById(R.id.timePickerFrom);
         timePickerTo = view.findViewById(R.id.timePickerTo);
 
@@ -110,6 +104,7 @@ public class NewAutoSMSFragment extends Fragment {
 
         buttonNewCreate = view.findViewById(R.id.buttonNewCreate);
 
+        //GET SIM CARDS AND PHONE NUMBERS
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
@@ -204,6 +199,7 @@ public class NewAutoSMSFragment extends Fragment {
             }
         });
 
+        //CREATE NEW AUTOSMS REPLY
         buttonNewCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -230,33 +226,29 @@ public class NewAutoSMSFragment extends Fragment {
                     Type listType = new TypeToken<List<AutoSMS>>() {}.getType();
                     List<AutoSMS> replys = gson.fromJson(existingJson, listType);
 
-                    Boolean[] days = new Boolean[]{false, false, false, false, false, false, false};
-
                     // Check which CheckBoxs are checked
-                    if(checkBoxNewMon.isChecked()){
-                        days[0] = true;
-                    } else if (checkBoxNewTue.isChecked()) {
-                        days[1] = true;
-                    } else if (checkBoxNewWed.isChecked()) {
-                        days[2] = true;
-                    } else if (checkBoxNewThu.isChecked()) {
-                        days[3] = true;
-                    } else if (checkBoxNewFri.isChecked()) {
-                        days[4] = true;
-                    } else if (checkBoxNewSat.isChecked()) {
-                        days[5] = true;
-                    } else if (checkBoxNewSun.isChecked()) {
-                        days[6] = true;
-                    }
+                    Boolean[] days = new Boolean[]{checkBoxNewMon.isChecked(), checkBoxNewTue.isChecked(), checkBoxNewWed.isChecked(), checkBoxNewThu.isChecked(), checkBoxNewFri.isChecked(), checkBoxNewSat.isChecked(), checkBoxNewSun.isChecked()};
 
-                    timeFrom = String.valueOf(timePickerFrom.getHour()) + timePickerFrom.getMinute();
-                    timeTo = String.valueOf(timePickerTo.getHour()) + timePickerTo.getMinute();
+                    // Get the selected hour and minute from the TimePicker
+                    int hourFrom, minuteFrom, hourTo, minuteTo;
+
+                    hourFrom = timePickerFrom.getHour();
+                    minuteFrom = timePickerFrom.getMinute();
+
+                    hourTo = timePickerTo.getHour();
+                    minuteTo = timePickerTo.getMinute();
+
+                    // Format the hour and minute values as "00:00" format
+                    timeFrom = String.format(Locale.getDefault(), "%02d:%02d", hourFrom, minuteFrom);
+                    timeTo = String.format(Locale.getDefault(), "%02d:%02d", hourTo, minuteTo);
+
+                    Log.d("LIST", String.valueOf(selectedSimCardsList.isEmpty()));
 
                     // Update the data structure (e.g., add, remove, or modify elements)
                     replys.add(new AutoSMS(title.getText().toString(),
                             message.getText().toString(),
-                            Arrays.asList(simCards),
-                            Arrays.asList(phoneNumbers),
+                            selectedSimCardsList,
+                            selectedNumbersList,
                             days,
                             timeFrom,
                             timeTo,
@@ -271,7 +263,21 @@ public class NewAutoSMSFragment extends Fragment {
                     osw.write(updatedJson);
                     osw.close();
                     fos.close();
-                    Log.d("JSON Update", "JSON file updated successfully.");
+                    Toast.makeText(getContext(), "New AutoSMS Reply Created", Toast.LENGTH_SHORT).show();
+
+                    // Reset Values after creating new autosms reply
+                    title.setText("");
+                    message.setText("");
+                    spinnerSimCards.setSelection(0);
+                    spinnerNumbers.setSelection(0);
+                    checkBoxNewMon.setChecked(false);
+                    checkBoxNewTue.setChecked(false);
+                    checkBoxNewWed.setChecked(false);
+                    checkBoxNewThu.setChecked(false);
+                    checkBoxNewFri.setChecked(false);
+                    checkBoxNewSat.setChecked(false);
+                    checkBoxNewSun.setChecked(false);
+
                 } catch (IOException e) {
                     Log.e("JSON Update", "Error updating JSON file: " + e.getMessage());
                 }

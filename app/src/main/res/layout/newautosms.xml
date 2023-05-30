@@ -384,7 +384,7 @@
                         </LinearLayout>
 
                         <TimePicker
-                            android:id="@+id/timePickerTo"
+                            android:id="@+id/timePickerFrom"
                             android:layout_width="180dp"
                             android:layout_height="150dp"
                             android:timePickerMode="spinner"
@@ -392,7 +392,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 
                         <TimePicker
-                            android:id="@+id/timePickerFrom"
+                            android:id="@+id/timePickerTo"
                             android:layout_width="180dp"
                             android:layout_height="150dp"
                             android:timePickerMode="spinner"
