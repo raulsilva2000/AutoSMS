@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -143,34 +144,6 @@ public class NewAutoSMSFragment extends Fragment {
                 }
         );
 
-        spinnerNumbers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedOption = parent.getItemAtPosition(position).toString();
-                if (selectedOption.equals("Specific Contacts")) {
-                    addContacts.setVisibility(View.VISIBLE);
-                    selectedContactsNumber.setText(totalSelectedContacts);
-                }
-                else {
-                    addContacts.setVisibility(View.INVISIBLE);
-                    selectedContactsNumber.setText("");
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                //Do nothing
-            }
-        });
-
-        addContacts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), Contact_Pickers.class);
-                launcher.launch(intent);
-            }
-        });
-
         spinnerSimCards.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -199,6 +172,35 @@ public class NewAutoSMSFragment extends Fragment {
             }
         });
 
+        spinnerNumbers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedOption = parent.getItemAtPosition(position).toString();
+                if (selectedOption.equals("Specific Contacts")) {
+                    addContacts.setVisibility(View.VISIBLE);
+                    selectedContactsNumber.setText(totalSelectedContacts);
+                }
+                else {
+                    addContacts.setVisibility(View.INVISIBLE);
+                    selectedContactsNumber.setText("");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //Do nothing
+            }
+        });
+
+        addContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), Contact_Pickers.class);
+                launcher.launch(intent);
+            }
+        });
+
+
         //CREATE NEW AUTOSMS REPLY
         buttonNewCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,6 +228,17 @@ public class NewAutoSMSFragment extends Fragment {
                     Type listType = new TypeToken<List<AutoSMS>>() {}.getType();
                     List<AutoSMS> replys = gson.fromJson(existingJson, listType);
 
+                    //Check which spinner option is selected
+                    if(spinnerSimCards.getSelectedItemPosition() == 0){ //check if option selected is "All SIM Cards"
+                        selectedSimCardsList = new ArrayList<>(Arrays.asList("allSimCards"));
+                    }
+
+                    if(spinnerNumbers.getSelectedItemPosition() == 0){ //check if option selected is "Unknown Numbers"
+                        selectedNumbersList = new ArrayList<>(Arrays.asList("unknownNumbers"));
+                    } else if(spinnerNumbers.getSelectedItemPosition() == 1){ //check if option selected is "Any Number"
+                        selectedNumbersList = new ArrayList<>(Arrays.asList("anyNumber"));
+                    }
+
                     // Check which CheckBoxs are checked
                     Boolean[] days = new Boolean[]{checkBoxNewMon.isChecked(), checkBoxNewTue.isChecked(), checkBoxNewWed.isChecked(), checkBoxNewThu.isChecked(), checkBoxNewFri.isChecked(), checkBoxNewSat.isChecked(), checkBoxNewSun.isChecked()};
 
@@ -241,8 +254,6 @@ public class NewAutoSMSFragment extends Fragment {
                     // Format the hour and minute values as "00:00" format
                     timeFrom = String.format(Locale.getDefault(), "%02d:%02d", hourFrom, minuteFrom);
                     timeTo = String.format(Locale.getDefault(), "%02d:%02d", hourTo, minuteTo);
-
-                    Log.d("LIST", String.valueOf(selectedSimCardsList.isEmpty()));
 
                     // Update the data structure (e.g., add, remove, or modify elements)
                     replys.add(new AutoSMS(title.getText().toString(),

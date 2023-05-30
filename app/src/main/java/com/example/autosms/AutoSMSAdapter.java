@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHolder> {
     List<AutoSMS> replys;
@@ -124,16 +125,24 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
                     }
                     i++;
                 }
-                replyDays.setText(replyDaysText.substring(0, replyDaysText.length() - 2));
+                replyDays.setText(replyDaysText.substring(0, replyDaysText.length() - 1));
             }
 
             //Atribuicao do total de numeros
-            if(replys.get(position).getNumbers().size() == 1){
-                String totalNumbers = String.valueOf(replys.get(position).getNumbers().size()) + " number";
+            if(Objects.equals(replys.get(position).getNumbers().get(0), "unknownNumbers")){ //if it's to Unknown Numbers
+                String totalNumbers = "Unknown numbers";
                 replyNumbers.setText(totalNumbers);
-            } else {
-                String totalNumbers = String.valueOf(replys.get(position).getNumbers().size()) + " numbers";
+            } else if(Objects.equals(replys.get(position).getNumbers().get(0), "anyNumber")){ //if it's to Any Number
+                String totalNumbers = "Any number";
                 replyNumbers.setText(totalNumbers);
+            } else { //if it's to Specific Contact
+                if(replys.get(position).getNumbers().size() == 1){
+                    String totalNumbers = String.valueOf(replys.get(position).getNumbers().size()) + " number";
+                    replyNumbers.setText(totalNumbers);
+                } else {
+                    String totalNumbers = String.valueOf(replys.get(position).getNumbers().size()) + " numbers";
+                    replyNumbers.setText(totalNumbers);
+                }
             }
 
             //Atribuicao do tempo
