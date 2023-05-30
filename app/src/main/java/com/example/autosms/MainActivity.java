@@ -3,12 +3,21 @@ package com.example.autosms;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     ActiveFragment activeFragment = new ActiveFragment();
     NewAutoSMSFragment newAutoSMSFragment = new NewAutoSMSFragment();
     SentMessagesFragment sentMessagesFragment = new SentMessagesFragment();
-
     DrawerLayout drawerLayout;
     private ImageView menuIcon;
     private ImageView closeMenu;
@@ -32,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ConstraintLayout editProfileMenu;
     private ConstraintLayout languageMenu;
     private ConstraintLayout logoutMenu;
+    private static final int REQUEST_PERMISSIONS_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
         updateTextViewTitleHeader("Active Replys");
         getSupportFragmentManager().beginTransaction().replace(R.id.containerFrame, activeFragment).commit();
+
+        // Request runtime permissions
+        requestPermissions();
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -216,6 +228,38 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView.setSelectedItemId(id);
         closeDrawer();
+    }
+
+    private void requestPermissions() {
+        //Request permissions
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.SEND_SMS}, REQUEST_PERMISSIONS_CODE);
+        }
+
+        //Request permissions again if not accepted
+        while (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            tryAgain();
+        }
+    }
+
+    private void tryAgain() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Need Permissions");
+        builder.setMessage("This app needs PHONE, SMS permissions to work.");
+        builder.setPositiveButton("TRY AGAIN", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                requestPermissions();
+            }
+        });
+        builder.setNegativeButton("CLOSE APP", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                finish();
+            }
+        });
+        builder.show();
     }
 
 }
