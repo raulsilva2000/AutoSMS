@@ -14,8 +14,6 @@ public class MissedCallReceiver extends BroadcastReceiver {
         String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
         String phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
 
-        Log.d("DADOS", "NUMERO LIGOU: " + phoneNumber);
-
         if (TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
             // Call not picked up, start the service to send SMS
             Intent serviceIntent = new Intent(context, MissedCallService.class);
