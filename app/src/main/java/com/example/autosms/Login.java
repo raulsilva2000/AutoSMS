@@ -66,12 +66,13 @@ public class Login extends AppCompatActivity {
 
     private void loginUser(String userEmailInput, String userPasswordInput) {
         Log.d("credentials", userEmailInput + " " + userPasswordInput);
-        if (Objects.equals(userEmailInput, "raul@gmail.com") && Objects.equals(userPasswordInput, "1234")) {
+        if (userEmailInput.equals("raul@gmail.com") && userPasswordInput.equals("1234")) {
             // User login and passing that user to new activity
             Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(Login.this, MainActivity.class);
-            i.putExtra("email", userEmailInput);
-            startActivity(i);
+            Intent intent = new Intent(Login.this, MainActivity.class);
+            intent.putExtra("email", userEmailInput);
+            setResult(RESULT_OK, intent);
+            finish();
         } else {
             // display a toast message when user enters wrong credentials
             Toast.makeText(Login.this, "Wrong credentials!", Toast.LENGTH_LONG).show();

@@ -1,5 +1,7 @@
 package com.example.autosms;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -9,6 +11,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,13 +21,17 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
@@ -32,14 +39,22 @@ public class MainActivity extends AppCompatActivity {
     NewAutoSMSFragment newAutoSMSFragment = new NewAutoSMSFragment();
     SentMessagesFragment sentMessagesFragment = new SentMessagesFragment();
     DrawerLayout drawerLayout;
-    private ImageView menuIcon;
-    private ImageView closeMenu;
-    private ConstraintLayout homeMenu;
-    private ConstraintLayout newAutoSMS;
-    private ConstraintLayout messagesMenu;
-    private ConstraintLayout editProfileMenu;
-    private ConstraintLayout languageMenu;
-    private ConstraintLayout logoutMenu;
+    ImageView menuIcon;
+    ImageView closeMenu;
+    ConstraintLayout homeMenu;
+    ConstraintLayout newAutoSMS;
+    ConstraintLayout messagesMenu;
+    ConstraintLayout editProfileMenu;
+    ConstraintLayout languageMenu;
+    ConstraintLayout logoutMenu;
+    ImageView headerProfileImage;
+    ImageView drawerProfileImage;
+    TextView drawerName;
+    TextView drawerEmail;
+    TextView loginButton;
+    Button drawerLogin;
+    String userEmail;
+    ActivityResultLauncher<Intent> launcher;
     private static final int REQUEST_PERMISSIONS_CODE = 100;
 
     @Override
@@ -59,12 +74,36 @@ public class MainActivity extends AppCompatActivity {
         editProfileMenu = findViewById(R.id.editprofileMenu);
         languageMenu = findViewById(R.id.languageMenu);
         logoutMenu = findViewById(R.id.logoutMenu);
+        loginButton = findViewById(R.id.textViewLoginButton);
+        drawerLogin = findViewById(R.id.loginButtonDrawerLogin);
+        headerProfileImage = findViewById(R.id.imageViewHeaderProfileImage);
+        drawerProfileImage = findViewById(R.id.imageViewDrawerProfileImage);
+        drawerName = findViewById(R.id.textViewDrawerName);
+        drawerEmail = findViewById(R.id.textViewDrawerEmail);
 
         updateTextViewTitleHeader("Active Replys");
         getSupportFragmentManager().beginTransaction().replace(R.id.containerFrame, activeFragment).commit();
 
         // Request runtime permissions
         requestPermissions();
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to start the new activity
+                Intent intent = new Intent(MainActivity.this, Login.class);
+                launcher.launch(intent);
+            }
+        });
+
+        drawerLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to start the new activity
+                Intent intent = new Intent(MainActivity.this, Login.class);
+                launcher.launch(intent);
+            }
+        });
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -150,6 +189,32 @@ public class MainActivity extends AppCompatActivity {
                 logout(view);
             }
         });
+
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null && data.hasExtra("email")) {
+                            String email = data.getStringExtra("email");
+                            Log.d("DADOS DO resultData", email);
+                            if (!email.isEmpty()) {
+                                userEmail = email;
+                                drawerEmail.setText(email);
+                                changeToLoggedIn();
+                            }
+                        }
+                    }
+                });
+    }
+
+    public void changeToLoggedIn() {
+        loginButton.setVisibility(View.INVISIBLE);
+        drawerLogin.setVisibility(View.INVISIBLE);
+        headerProfileImage.setVisibility(View.VISIBLE);
+        drawerProfileImage.setVisibility(View.VISIBLE);
+        drawerName.setVisibility(View.VISIBLE);
+        drawerEmail.setVisibility(View.VISIBLE);
+        logoutMenu.setVisibility(View.VISIBLE);
     }
 
     public void updateTextViewTitleHeader(String text) {
@@ -201,6 +266,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mainActivity.finish();
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
 

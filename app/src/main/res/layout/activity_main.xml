@@ -24,6 +24,21 @@
             android:layout_weight="0"
             android:paddingTop="5dp">
 
+            <TextView
+                android:id="@+id/textViewLoginButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/corner_shape"
+                android:padding="7dp"
+                android:text="LOGIN"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/openDrawerMenu"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/openDrawerMenu" />
+
             <ImageView
                 android:id="@+id/openDrawerMenu"
                 android:layout_width="wrap_content"
@@ -35,10 +50,11 @@
                 app:srcCompat="@drawable/menu_icon" />
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/imageViewHeaderProfileImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/textViewTitleHeader"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textViewTitleHeader"
