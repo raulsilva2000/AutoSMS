@@ -63,21 +63,30 @@
             android:id="@+id/button_deselect_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
+            android:backgroundTint="#38B6FF"
             android:text="Deselect All" />
 
         <Button
             android:id="@+id/button_select_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
+            android:backgroundTint="#38B6FF"
             android:text="Select All" />
 
         <Button
             android:id="@+id/button_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
+            android:backgroundTint="#38B6FF"
             android:text="Confirm" />
     </LinearLayout>
 

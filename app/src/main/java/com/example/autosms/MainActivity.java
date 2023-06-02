@@ -30,6 +30,8 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     ConstraintLayout newAutoSMS;
     ConstraintLayout messagesMenu;
     ConstraintLayout editProfileMenu;
+    ConstraintLayout backupMenu;
     ConstraintLayout languageMenu;
     ConstraintLayout logoutMenu;
     ImageView headerProfileImage;
@@ -53,8 +56,9 @@ public class MainActivity extends AppCompatActivity {
     TextView drawerEmail;
     TextView loginButton;
     Button drawerLogin;
-    String userEmail;
     ActivityResultLauncher<Intent> launcher;
+    FirebaseAuth mAuth;
+
     private static final int REQUEST_PERMISSIONS_CODE = 100;
 
     @Override
@@ -72,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         newAutoSMS = findViewById(R.id.newautosmsMenu);
         messagesMenu = findViewById(R.id.messagesMenu);
         editProfileMenu = findViewById(R.id.editprofileMenu);
+        backupMenu = findViewById(R.id.backupMenu);
         languageMenu = findViewById(R.id.languageMenu);
         logoutMenu = findViewById(R.id.logoutMenu);
         loginButton = findViewById(R.id.textViewLoginButton);
@@ -80,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
         drawerProfileImage = findViewById(R.id.imageViewDrawerProfileImage);
         drawerName = findViewById(R.id.textViewDrawerName);
         drawerEmail = findViewById(R.id.textViewDrawerEmail);
+
+        mAuth = FirebaseAuth.getInstance();
 
         updateTextViewTitleHeader("Active Replys");
         getSupportFragmentManager().beginTransaction().replace(R.id.containerFrame, activeFragment).commit();
@@ -174,6 +181,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        backupMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(MainActivity.this, Backup.class);
+                startActivity(intent);
+            }
+        });
+
         languageMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -196,11 +212,13 @@ public class MainActivity extends AppCompatActivity {
                         Intent data = result.getData();
                         if (data != null && data.hasExtra("email")) {
                             String email = data.getStringExtra("email");
-                            Log.d("DADOS DO resultData", email);
                             if (!email.isEmpty()) {
-                                userEmail = email;
-                                drawerEmail.setText(email);
-                                changeToLoggedIn();
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                if (user != null) {
+                                    drawerName.setText(user.getDisplayName());
+                                    drawerEmail.setText(user.getEmail());
+                                    changeToLoggedIn();
+                                }
                             }
                         }
                     }
@@ -265,9 +283,10 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mainActivity.finish();
+                mAuth.signOut();
                 Intent intent = new Intent(MainActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
