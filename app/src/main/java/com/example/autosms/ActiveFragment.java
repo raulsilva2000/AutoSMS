@@ -1,5 +1,9 @@
 package com.example.autosms;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,6 +23,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -49,6 +55,9 @@ public class ActiveFragment extends Fragment {
     private RecyclerView recyclerViewReplys;
     private List<AutoSMS> replys = new ArrayList<>();
     Spinner sortSpinner;
+    TextView noReplys;
+    ImageView arrowImageView;
+    Animation arrowAnimation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +77,19 @@ public class ActiveFragment extends Fragment {
         initRecyclerview(view);
 
         sortSpinner = view.findViewById(R.id.spinner_filters);
+        noReplys = view.findViewById(R.id.textViewNoReplys);
+
+        arrowImageView = view.findViewById(R.id.arrowImageView);
+        AnimatorSet animatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(getContext(), R.animator.arrow_animation);
+        animatorSet.setTarget(arrowImageView);
+        animatorSet.cancel();
+
+        if(autoSMSAdapter.getItemCount() == 0) {
+            noReplys.setVisibility(View.VISIBLE);
+            arrowImageView.setVisibility(View.VISIBLE);
+            animatorSet.start();
+
+        }
 
         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

@@ -4,8 +4,6 @@
         <item name="colorPrimary">#38B6FF</item>
     </style>
 
-    <style name="Theme.AutoSMS" parent="Base.Theme.AutoSMS" />
-
     <style name="circleImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
