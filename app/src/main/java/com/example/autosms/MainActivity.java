@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     TextView drawerEmail;
     TextView loginButton;
     Button drawerLogin;
+    Button drawerRegister;
     ActivityResultLauncher<Intent> launcher;
     FirebaseAuth mAuth;
 
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         logoutMenu = findViewById(R.id.logoutMenu);
         loginButton = findViewById(R.id.textViewLoginButton);
         drawerLogin = findViewById(R.id.loginButtonDrawerLogin);
+        drawerRegister = findViewById(R.id.loginButtonDrawerRegister);
         headerProfileImage = findViewById(R.id.imageViewHeaderProfileImage);
         drawerProfileImage = findViewById(R.id.imageViewDrawerProfileImage);
         drawerName = findViewById(R.id.textViewDrawerName);
@@ -108,6 +110,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Create an Intent to start the new activity
                 Intent intent = new Intent(MainActivity.this, Login.class);
+                launcher.launch(intent);
+            }
+        });
+
+        drawerRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to start the new activity
+                Intent intent = new Intent(MainActivity.this, Register.class);
                 launcher.launch(intent);
             }
         });
@@ -228,11 +239,13 @@ public class MainActivity extends AppCompatActivity {
     public void changeToLoggedIn() {
         loginButton.setVisibility(View.INVISIBLE);
         drawerLogin.setVisibility(View.INVISIBLE);
+        drawerRegister.setVisibility(View.INVISIBLE);
         headerProfileImage.setVisibility(View.VISIBLE);
         drawerProfileImage.setVisibility(View.VISIBLE);
         drawerName.setVisibility(View.VISIBLE);
         drawerEmail.setVisibility(View.VISIBLE);
         logoutMenu.setVisibility(View.VISIBLE);
+        backupMenu.setVisibility(View.VISIBLE);
     }
 
     public void updateTextViewTitleHeader(String text) {

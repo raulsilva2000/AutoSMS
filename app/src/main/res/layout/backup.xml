@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:backgroundTint="#38B6FF"
-                android:text="CREATE"
+                android:text="EXPORT"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewExport" />
@@ -70,8 +70,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/backupRecyclerView"
+            <ScrollView
+                android:id="@+id/scrollView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -79,18 +79,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewImport">
 
-            </androidx.recyclerview.widget.RecyclerView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/backupRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp">
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </ScrollView>
 
             <Button
                 android:id="@+id/importButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:backgroundTint="#38B6FF"
-                android:text="LOAD"
+                android:text="IMPORT"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/backupRecyclerView" />
+                app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -57,7 +57,6 @@ public class ActiveFragment extends Fragment {
     Spinner sortSpinner;
     TextView noReplys;
     ImageView arrowImageView;
-    Animation arrowAnimation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
