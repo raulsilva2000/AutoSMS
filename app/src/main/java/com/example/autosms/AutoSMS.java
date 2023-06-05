@@ -9,17 +9,17 @@ import java.util.List;
 public class AutoSMS {
     private String title;
     private String message;
-    private List<String> simCards;
+    private String simCard;
     private List<String> numbers;
     private Boolean[] days;
     private String timeFrom;
     private String timeTo;
     private long timestamp;
 
-    public AutoSMS(String title, String message, List<String> simCards, List<String> numbers, Boolean[] days, String timeFrom, String timeTo, long timestamp) {
+    public AutoSMS(String title, String message, String simCard, List<String> numbers, Boolean[] days, String timeFrom, String timeTo, long timestamp) {
         this.title = title;
         this.message = message;
-        this.simCards = simCards;
+        this.simCard = simCard;
         this.numbers = numbers;
         this.days = days;
         this.timeFrom = timeFrom;
@@ -43,12 +43,12 @@ public class AutoSMS {
         this.message = message;
     }
 
-    public List<String> getSimCards() {
-        return simCards;
+    public String getSimCard() {
+        return simCard;
     }
 
-    public void setSimCards(List<String> simCards) {
-        this.simCards = simCards;
+    public void setSimCard(String simCard) {
+        this.simCard = simCard;
     }
 
     public List<String> getNumbers() {

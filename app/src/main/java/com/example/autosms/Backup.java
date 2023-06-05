@@ -136,7 +136,7 @@ public class Backup extends AppCompatActivity {
                                 AutoSMS[] autoSMSArrayFromBackup = gsonFromBackup.fromJson(jsonContent, AutoSMS[].class);
 
                                 for (AutoSMS reply : autoSMSArrayFromBackup) {
-                                    replys.add(new AutoSMS(reply.getTitle(), reply.getMessage(), reply.getSimCards(), reply.getNumbers(), reply.getDays(), reply.getTimeFrom(), reply.getTimeTo(), reply.getTimestamp()));
+                                    replys.add(new AutoSMS(reply.getTitle(), reply.getMessage(), reply.getSimCard(), reply.getNumbers(), reply.getDays(), reply.getTimeFrom(), reply.getTimeTo(), reply.getTimestamp()));
                                 }
 
                                 // Second, read data.json from internal storage and get current active replys
@@ -153,7 +153,7 @@ public class Backup extends AppCompatActivity {
                                 AutoSMS[] autoSMSArray = gson.fromJson(jsonData.toString(), AutoSMS[].class);
 
                                 for (AutoSMS reply : autoSMSArray) {
-                                    replys.add(new AutoSMS(reply.getTitle(), reply.getMessage(), reply.getSimCards(), reply.getNumbers(), reply.getDays(), reply.getTimeFrom(), reply.getTimeTo(), reply.getTimestamp()));
+                                    replys.add(new AutoSMS(reply.getTitle(), reply.getMessage(), reply.getSimCard(), reply.getNumbers(), reply.getDays(), reply.getTimeFrom(), reply.getTimeTo(), reply.getTimestamp()));
                                 }
 
                                 // Convert the updated data structure to JSON

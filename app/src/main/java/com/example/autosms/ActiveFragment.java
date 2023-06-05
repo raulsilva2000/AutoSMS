@@ -151,7 +151,7 @@ public class ActiveFragment extends Fragment {
             Gson gson = new Gson();
             AutoSMS[] autoSMSArray = gson.fromJson(jsonData.toString(), AutoSMS[].class);
             for (AutoSMS reply : autoSMSArray) {
-                replys.add(new AutoSMS(reply.getTitle(), reply.getMessage(), reply.getSimCards(), reply.getNumbers(), reply.getDays(), reply.getTimeFrom(), reply.getTimeTo(), reply.getTimestamp()));
+                replys.add(new AutoSMS(reply.getTitle(), reply.getMessage(), reply.getSimCard(), reply.getNumbers(), reply.getDays(), reply.getTimeFrom(), reply.getTimeTo(), reply.getTimestamp()));
             }
 
         } catch (IOException e) {

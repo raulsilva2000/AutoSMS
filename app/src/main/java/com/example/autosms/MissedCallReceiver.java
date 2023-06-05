@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,15 +44,14 @@ public class MissedCallReceiver extends BroadcastReceiver {
         this.context = context;
         String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
         phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-        if (phoneNumber != null && TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
+        if (phoneNumber != null && TelephonyManager.EXTRA_STATE_IDLE.equals(state)) { //if missed call
             // Call not picked up, start the service to send SMS
             sendingProcess();
-            //sendSmsWithSimCard(phoneNumber, "ola", 0);
         }
     }
 
-    //Aqui vamos ter percorrer cada resposta automática do data.json e enviar sms se a situacao corresponder a uma determinada resposta automatica
-    private void sendingProcess(){
+    //Aqui vamos ter percorrer cada resposta automatica do data.json e enviar sms se a situacao corresponder a uma determinada resposta automatica
+    private void sendingProcess() {
         // Step 1: Read JSON data from the file
         FileInputStream inputStream = null;
         try {
@@ -68,29 +68,7 @@ public class MissedCallReceiver extends BroadcastReceiver {
             Gson gson = new Gson();
             AutoSMS[] autoSMSArray = gson.fromJson(jsonData.toString(), AutoSMS[].class); //Get Active AutoSMS Replys
 
-            SmsManager smsManager = SmsManager.getDefault();
-
-            // GET SIM CARDS
-
-            ArrayList<String> simCardsFromPhone = new ArrayList<>();
-
-            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
-            if (telephonyManager != null) {
-                SubscriptionManager subscriptionManager = SubscriptionManager.from(context.getApplicationContext());
-                List<SubscriptionInfo> subscriptionInfoList = subscriptionManager.getActiveSubscriptionInfoList();
-                if (subscriptionInfoList != null && !subscriptionInfoList.isEmpty()) {
-                    for (SubscriptionInfo subscriptionInfo : subscriptionInfoList) {
-                        String simCardNumber = subscriptionInfo.getNumber();
-                        simCardsFromPhone.add(simCardNumber);
-                    }
-                }
-            }
-
-            Log.d("DADOS DO SIM CARDS", simCardsFromPhone.toString());
-
             // GET CONTACTS LIST
-
             ArrayList<String> contactsList = new ArrayList<>();
 
             // Define the projection (columns) you want to retrieve from the ContactsContract API
@@ -149,80 +127,53 @@ public class MissedCallReceiver extends BroadcastReceiver {
             SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
             String currentTimeString = formatTime.format(new Date());
 
+            Date startTime = null;
+            Date endTime = null;
+            Date currentTime = null;
+
+            boolean allday = false; // represents option All day (24hours) is selected
+
             // VALIDATION
 
-            for (AutoSMS reply : autoSMSArray) {
-
-                // Parse the start and end times to Date objects
-                Date startTime = formatTime.parse(reply.getTimeFrom());
-                Date endTime = formatTime.parse(reply.getTimeTo());
-
-                // Parse the current time to a Date object
-                Date currentTime = formatTime.parse(currentTimeString);
-                assert currentTime != null;
-
-                String message = reply.getMessage();
-
-                if(reply.getSimCards().get(0).equals("allSimCards")){ //All SIM Cards
-                    if(reply.getNumbers().get(0).equals("unknownNumbers")){ //Unknown Numbers
-                        if(!contactsList.contains(phoneNumber)){ //se a lista de contactos nao tiver o numero, entao envia SMS
-                            if(reply.getDays()[dayOfWeek].equals(true)){ //se dia atual estiver selecionado
-                                if( (currentTime.after(startTime) && currentTime.before(endTime)) || currentTime.equals(startTime) || currentTime.equals(endTime) ){
-                                    sendMessage(smsManager, reply.getTitle(), phoneNumber, message);
-                                }
-                            }
-                        }
-                    } else if(reply.getNumbers().get(0).equals("anyNumber")){ //Any Number
-                        if(reply.getDays()[dayOfWeek].equals(true)) {
-                            sendMessage(smsManager, reply.getTitle(), phoneNumber, message);
-                        }
-                    } else { //Specific Contacts
-                        if(reply.getDays()[dayOfWeek].equals(true)){ //se dia atual estiver selecionado
-                            if( (currentTime.after(startTime) && currentTime.before(endTime)) || currentTime.equals(startTime) || currentTime.equals(endTime) ){
-                                sendMessage(smsManager, reply.getTitle(), phoneNumber, message);
-                            }
-                        }
-                    }
-                } else { //Specific Cards
-                    for (String card : reply.getSimCards()){
-                        if (simCardsFromPhone.contains(card)){ //Card from Phone is same as current selected card from AutoSMS reply
-                            if(reply.getNumbers().get(0).equals("unknownNumbers")){ //Unknown Numbers
-                                if(!contactsList.contains(phoneNumber)){ //se a lista de contactos nao tiver o numero, entao envia SMS
-                                    if(reply.getDays()[dayOfWeek].equals(true)) {
-                                        if( (currentTime.after(startTime) && currentTime.before(endTime)) || currentTime.equals(startTime) || currentTime.equals(endTime) ){
-                                            sendMessage(smsManager, reply.getTitle(), phoneNumber, message);
-                                            break;
-                                        }
-                                    }
-                                }
-                            } else if(reply.getNumbers().get(0).equals("anyNumber")){ //Any Number
-                                if(reply.getDays()[dayOfWeek].equals(true)) {
-                                    if( (currentTime.after(startTime) && currentTime.before(endTime)) || currentTime.equals(startTime) || currentTime.equals(endTime) ){
-                                        sendMessage(smsManager, reply.getTitle(), phoneNumber, message);
-                                        break;
-                                    }
-                                }
-                            } else { //Specific Contacts
-                                if(reply.getDays()[dayOfWeek].equals(true)) {
-                                    if( (currentTime.after(startTime) && currentTime.before(endTime)) || currentTime.equals(startTime) || currentTime.equals(endTime) ){
-                                        sendMessage(smsManager, reply.getTitle(), phoneNumber, message);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
+            for (AutoSMS reply : autoSMSArray) {  //ir a cada resposta automatica e ver se responde a chamada perdida
+                if (!reply.getTimeFrom().equals("24hours")) { //if time is not equal to 24hours then go get timeFrom and timeTo
+                    startTime = formatTime.parse(reply.getTimeFrom());
+                    endTime = formatTime.parse(reply.getTimeTo());
+                    currentTime = formatTime.parse(currentTimeString);
+                } else {
+                    allday = true;
                 }
 
+                String message = reply.getMessage(); // message to send
+
+                // CODE TO SEE IF CURRENT REPLY WILL RESPOND TO THIS MISSED CALL
+
+                if ((reply.getNumbers().get(0).equals("unknownNumbers") && !contactsList.contains(phoneNumber))
+                        || reply.getNumbers().get(0).equals("anyNumber")
+                        || reply.getNumbers().contains(phoneNumber)) {
+
+                    if (reply.getDays()[dayOfWeek] && (allday || (currentTime.after(startTime) && currentTime.before(endTime)) || currentTime.equals(startTime) || currentTime.equals(endTime))) {
+                        sendMessage(reply.getTitle(), phoneNumber, message, reply.getSimCard());
+                    }
+                }
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
     }
 
-    public void sendMessage(SmsManager smsManager, String replyTitle, String phoneNumber, String messageToSend){
+    public void sendMessage(String replyTitle, String phoneNumber, String messageToSend, String simSlotIndex) {
         //Register the sent message to messages.json
         try {
+            // Get the default instance of SmsManager
+            SmsManager smsManager = SmsManager.getDefault();
+
+            //Use the vendor-specific API to set the SIM card index
+            Method method = SmsManager.class.getMethod("getSmsManagerForSubscriptionId", int.class);
+            smsManager = (SmsManager) method.invoke(smsManager, Integer.parseInt(simSlotIndex));
+
+            assert smsManager != null;
+            // Send the SMS
             smsManager.sendTextMessage(phoneNumber, null, messageToSend, null, null);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -258,22 +209,6 @@ public class MissedCallReceiver extends BroadcastReceiver {
             osw.close();
             fos.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void sendSmsWithSimCard(String phoneNumber, String message, int simSlotIndex) {
-        try {
-            // Get the default instance of SmsManager
-            SmsManager smsManager = SmsManager.getDefault();
-
-            //Use the vendor-specific API to set the SIM card index
-            Method method = SmsManager.class.getMethod("getSmsManagerForSubscriptionId", int.class);
-            smsManager = (SmsManager) method.invoke(smsManager, simSlotIndex);
-
-            // Send the SMS
-            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
         } catch (Exception e) {
             e.printStackTrace();
         }

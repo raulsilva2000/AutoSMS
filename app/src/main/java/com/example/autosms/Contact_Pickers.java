@@ -22,8 +22,9 @@ import java.util.ArrayList;
 public class Contact_Pickers extends Activity {
     private ArrayList<Contact> contacts;
     private ContactAdapter contactAdapter;
-    private TextView cancelButton;
-    private Button button_deselect_all;
+    TextView cancelButton;
+    Button button_select_all;
+    Button button_deselect_all;
     private static final int REQUEST_CODE_READ_CONTACTS = 1;
 
     @Override
@@ -33,8 +34,8 @@ public class Contact_Pickers extends Activity {
 
         ListView contactsListView = findViewById(R.id.list_view_simCards);
         Button confirmButton = findViewById(R.id.button_confirm);
-        Button selectAllButton = findViewById(R.id.button_select_all);
         cancelButton = findViewById(R.id.cancelButton);
+        button_select_all = findViewById(R.id.button_select_all);
         button_deselect_all = findViewById(R.id.button_deselect_all);
 
         contacts = new ArrayList<>();
@@ -80,7 +81,7 @@ public class Contact_Pickers extends Activity {
             }
         });
 
-        button_deselect_all.setOnClickListener(new View.OnClickListener() {
+        button_select_all.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     for (Contact contact : contacts) {
@@ -89,6 +90,16 @@ public class Contact_Pickers extends Activity {
                     contactAdapter.notifyDataSetChanged();
                 }
             });
+
+        button_deselect_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (Contact contact : contacts) {
+                    contact.setSelected(false);
+                }
+                contactAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override

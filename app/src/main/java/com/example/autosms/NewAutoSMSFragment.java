@@ -1,13 +1,20 @@
 package com.example.autosms;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -32,6 +40,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +51,8 @@ public class NewAutoSMSFragment extends Fragment {
     EditText message;
     Spinner spinnerSimCards;
     Spinner spinnerNumbers;
+    Spinner spinnerTime;
+    LinearLayout linearLayoutTime;
     CheckBox checkBoxNewMon;
     CheckBox checkBoxNewTue;
     CheckBox checkBoxNewWed;
@@ -50,15 +61,12 @@ public class NewAutoSMSFragment extends Fragment {
     CheckBox checkBoxNewSat;
     CheckBox checkBoxNewSun;
     TextView selectedContactsNumber;
-    TextView selectedSIMCards;
     Button buttonNewCreate;
     String[] phoneNumbers;
-    String[] simCards;
-    Button addSimCards;
+    List<String> simCards;
     Button addContacts;
     String totalSelectedContacts;
-    String totalSelectedCards;
-    List<String> selectedSimCardsList;
+    String selectedSimCard;
     List<String> selectedNumbersList;
     TimePicker timePickerFrom;
     TimePicker timePickerTo;
@@ -78,15 +86,16 @@ public class NewAutoSMSFragment extends Fragment {
         View view = inflater.inflate(R.layout.newautosms, container, false);
 
         spinnerSimCards = view.findViewById(R.id.spinnerSimCards);
-        selectedSIMCards = view.findViewById(R.id.selectedSIMCards);
 
         spinnerNumbers = view.findViewById(R.id.spinnerNumbers);
         selectedContactsNumber = view.findViewById(R.id.selectedContacts);
 
+        spinnerTime = view.findViewById(R.id.spinnerTime);
+        linearLayoutTime = view.findViewById(R.id.linearLayoutTime);
+
         title = view.findViewById(R.id.editTextNewTitle);
         message = view.findViewById(R.id.editTextNewReply);
 
-        addSimCards = view.findViewById(R.id.buttonNewAddCards);
         addContacts = view.findViewById(R.id.buttonNewAddContacts);
 
         checkBoxNewMon = view.findViewById(R.id.checkBoxNewMon);
@@ -106,6 +115,11 @@ public class NewAutoSMSFragment extends Fragment {
 
         buttonNewCreate = view.findViewById(R.id.buttonNewCreate);
 
+        simCards = new ArrayList<>();
+
+        //Load SIM Cards from phone to Spinner
+        loadSIMCards();
+
         //GET SIM CARDS AND PHONE NUMBERS
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -114,64 +128,21 @@ public class NewAutoSMSFragment extends Fragment {
                         if (data != null && data.hasExtra("selectedContacts")) {
                             String resultData = data.getStringExtra("selectedContacts");
                             Log.d("DADOS DO resultData", resultData);
-                            if(!resultData.isEmpty()){
+                            if (!resultData.isEmpty()) {
                                 phoneNumbers = resultData.split(", ");
                                 String totalSelected = phoneNumbers.length + " selected";
 
                                 totalSelectedContacts = totalSelected;
                                 selectedContactsNumber.setText(totalSelected);
                                 selectedNumbersList = Arrays.asList(phoneNumbers);
-                            } else{
+                            } else {
                                 selectedContactsNumber.setText(getString(R.string.none_selected));
                                 selectedNumbersList = null;
-                            }
-
-                        } else if (data != null && data.hasExtra("selectedSimCards")) {
-                            String resultData = data.getStringExtra("selectedSimCards");
-
-                            if(!resultData.isEmpty()) {
-                                simCards = resultData.split(", ");
-                                String totalSelected = simCards.length + " selected";
-
-                                totalSelectedCards = totalSelected;
-                                selectedSIMCards.setText(totalSelected);
-                                selectedSimCardsList = Arrays.asList(simCards);
-                            } else {
-                                selectedSIMCards.setText(getString(R.string.none_selected));
-                                selectedSimCardsList = null;
                             }
                         }
                     }
                 }
         );
-
-        spinnerSimCards.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedOption = parent.getItemAtPosition(position).toString();
-                if (selectedOption.equals("Specific Cards")) {
-                    addSimCards.setVisibility(View.VISIBLE);
-                    selectedSIMCards.setText(totalSelectedCards);
-                }
-                else {
-                    addSimCards.setVisibility(View.INVISIBLE);
-                    selectedSIMCards.setText("");
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                //Do nothing
-            }
-        });
-
-        addSimCards.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SIMCard_Pickers.class);
-                launcher.launch(intent);
-            }
-        });
 
         spinnerNumbers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -198,6 +169,28 @@ public class NewAutoSMSFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), Contact_Pickers.class);
                 launcher.launch(intent);
+            }
+        });
+
+        spinnerTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedOption = parent.getItemAtPosition(position).toString();
+                if (selectedOption.equals("Specific Time")) {
+                    linearLayoutTime.setVisibility(View.VISIBLE);
+                    timePickerFrom.setVisibility(View.VISIBLE);
+                    timePickerTo.setVisibility(View.VISIBLE);
+                }
+                else {
+                    linearLayoutTime.setVisibility(View.GONE);
+                    timePickerFrom.setVisibility(View.GONE);
+                    timePickerTo.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //Do nothing
             }
         });
 
@@ -237,15 +230,22 @@ public class NewAutoSMSFragment extends Fragment {
                         }
                     }
 
-                    //Check which spinner option is selected
-                    if(spinnerSimCards.getSelectedItemPosition() == 0){ //check if option selected is "All SIM Cards"
-                        selectedSimCardsList = new ArrayList<>(Arrays.asList("allSimCards"));
-                    }
+                    //Check which spinner SIM CARD option is selected
+                    selectedSimCard = spinnerSimCards.getSelectedItem().toString(); //String comes in format "SIM 1"
+                    String simCardIndex = selectedSimCard.substring(selectedSimCard.length()-1); //Get last char
+                    Log.d("CARTAO", simCardIndex);
 
+                    //Check which spinner Numbers option is selected
                     if(spinnerNumbers.getSelectedItemPosition() == 0){ //check if option selected is "Unknown Numbers"
                         selectedNumbersList = new ArrayList<>(Arrays.asList("unknownNumbers"));
                     } else if(spinnerNumbers.getSelectedItemPosition() == 1){ //check if option selected is "Any Number"
                         selectedNumbersList = new ArrayList<>(Arrays.asList("anyNumber"));
+                    } else if(spinnerNumbers.getSelectedItemPosition() == 2){ //check if option selected is "Specific Contacts"
+                        // Validation, check if 0 specific contacts are selected
+                        if (selectedNumbersList==null){
+                            Toast.makeText(getContext(), "You need to select atleast 1 specific contact", Toast.LENGTH_SHORT).show();
+                            throw new IOException();
+                        }
                     }
 
                     // Check which CheckBoxs are checked
@@ -257,23 +257,29 @@ public class NewAutoSMSFragment extends Fragment {
                         throw new IOException();
                     }
 
-                    // Get the selected hour and minute from the TimePicker
-                    int hourFrom, minuteFrom, hourTo, minuteTo;
+                    //Check which spinner Time option is selected
+                    if(spinnerTime.getSelectedItemPosition() == 0){ //if option selected is "All day"
+                        timeFrom = "24hours";
+                        timeTo = "24hours";
+                    } else { //if option selected is "Specific Time"
+                        // Get the selected hour and minute from the TimePicker
+                        int hourFrom, minuteFrom, hourTo, minuteTo;
 
-                    hourFrom = timePickerFrom.getHour();
-                    minuteFrom = timePickerFrom.getMinute();
+                        hourFrom = timePickerFrom.getHour();
+                        minuteFrom = timePickerFrom.getMinute();
 
-                    hourTo = timePickerTo.getHour();
-                    minuteTo = timePickerTo.getMinute();
+                        hourTo = timePickerTo.getHour();
+                        minuteTo = timePickerTo.getMinute();
 
-                    // Format the hour and minute values as "00:00" format
-                    timeFrom = String.format(Locale.getDefault(), "%02d:%02d", hourFrom, minuteFrom);
-                    timeTo = String.format(Locale.getDefault(), "%02d:%02d", hourTo, minuteTo);
+                        // Format the hour and minute values as "00:00" format
+                        timeFrom = String.format(Locale.getDefault(), "%02d:%02d", hourFrom, minuteFrom);
+                        timeTo = String.format(Locale.getDefault(), "%02d:%02d", hourTo, minuteTo);
+                    }
 
                     // Update the data structure (e.g., add, remove, or modify elements)
                     replys.add(0, new AutoSMS(title.getText().toString(),
                             message.getText().toString(),
-                            selectedSimCardsList,
+                            simCardIndex,
                             selectedNumbersList,
                             days,
                             timeFrom,
@@ -313,5 +319,25 @@ public class NewAutoSMSFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void loadSIMCards() {
+        TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephonyManager != null) {
+            List<SubscriptionInfo> subscriptionInfoList = SubscriptionManager.from(getContext()).getActiveSubscriptionInfoList();
+            if (subscriptionInfoList != null) {
+                for (SubscriptionInfo subscriptionInfo : subscriptionInfoList) {
+                    String simIndex = String.valueOf(subscriptionInfo.getSimSlotIndex()+1);
+
+                    String displayName = "SIM " + simIndex;
+                    Log.d("DADOS", displayName);
+                    simCards.add(displayName);
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, simCards);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerSimCards.setAdapter(adapter);
+            }
+        }
     }
 }

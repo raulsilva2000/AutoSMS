@@ -16,6 +16,11 @@
         <item>Specific Cards</item>
     </string-array>
 
+    <string-array name="spinner_options_time">
+        <item>All day</item>
+        <item>Specific Time</item>
+    </string-array>
+
     <string-array name="spinner_filterReplys_options">
         <item>Last created</item>
         <item>First created</item>

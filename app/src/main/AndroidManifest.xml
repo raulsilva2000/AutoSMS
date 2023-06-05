@@ -49,10 +49,6 @@
             android:exported="true">
         </activity>
         <activity
-            android:name=".SIMCard_Pickers"
-            android:exported="true">
-        </activity>
-        <activity
             android:name=".Backup"
             android:exported="true">
         </activity>

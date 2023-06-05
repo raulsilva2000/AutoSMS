@@ -78,7 +78,6 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Login.this, Register.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -102,8 +101,8 @@ public class Login extends AppCompatActivity {
                             Intent intent = new Intent(Login.this, MainActivity.class);
                             intent.putExtra("email", userEmailInput);
                             setResult(RESULT_OK, intent);
-                            finish();
                             Toast.makeText(Login.this, "Login successful!", Toast.LENGTH_LONG).show();
+                            finish();
                         }
                     } else {
                         // Login failed, handle the error

@@ -3,9 +3,4 @@
     <style name="Base.Theme.AutoSMS" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">#38B6FF</item>
     </style>
-
-    <style name="circleImageView" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
-    </style>
 </resources>

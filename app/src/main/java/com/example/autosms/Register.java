@@ -71,7 +71,6 @@ public class Register extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Register.this, Login.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -79,8 +78,6 @@ public class Register extends AppCompatActivity {
         backRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Register.this, Login.class);
-                startActivity(intent);
                 finish();
             }
         });
@@ -101,12 +98,11 @@ public class Register extends AppCompatActivity {
                             user.updateProfile(profileUpdates)
                                     .addOnCompleteListener(profileUpdateTask -> {
                                         if (profileUpdateTask.isSuccessful()) {
-                                            // User profile updated successfully
-
-                                            Intent intent = new Intent(Register.this, Login.class);
-                                            startActivity(intent);
-                                            finish();
+                                            Intent intent = new Intent(Register.this, MainActivity.class);
+                                            intent.putExtra("email", userEmailInput);
+                                            setResult(RESULT_OK, intent);
                                             Toast.makeText(Register.this, "Register successful!\nYou can now login", Toast.LENGTH_LONG).show();
+                                            finish();
                                         } else {
                                             // Failed to update user profile
                                             Toast.makeText(this, "Failed to update user profile", Toast.LENGTH_SHORT).show();

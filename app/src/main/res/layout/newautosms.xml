@@ -129,33 +129,15 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
-
-                        <Button
-                            android:id="@+id/buttonNewAddCards"
-                            android:layout_width="50dp"
-                            android:layout_height="35dp"
-                            android:layout_marginStart="5dp"
-                            android:backgroundTint="#38B6FF"
-                            android:padding="0dp"
-                            android:paddingLeft="0dp"
-                            android:paddingTop="0dp"
-                            android:paddingRight="0dp"
-                            android:paddingBottom="0dp"
-                            android:text="Add"
-                            android:visibility="invisible"
-                            app:cornerRadius="5dp"
-                            app:iconPadding="0dp"
-                            app:iconSize="18dp"
-                            app:layout_constraintStart_toEndOf="@+id/spinnerSimCards"
-                            app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="5dp">
 
                         <TextView
                             android:id="@+id/textViewSIMCard"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:text="SIM Card:"
+                            android:text="Sender:"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -168,16 +150,6 @@
                             app:layout_constraintBottom_toBottomOf="@+id/textViewSIMCard"
                             app:layout_constraintStart_toEndOf="@+id/textViewSIMCard"
                             app:layout_constraintTop_toTopOf="@+id/textViewSIMCard" />
-
-                        <TextView
-                            android:id="@+id/selectedSIMCards"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:editable="false"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="@+id/spinnerSimCards"
-                            app:layout_constraintTop_toBottomOf="@+id/spinnerSimCards" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -210,7 +182,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:text="Phone Numbers"
+                            android:text="Numbers:"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -340,25 +312,40 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
+                        android:layout_marginTop="25dp"
+                        android:layout_marginBottom="30dp">
 
                         <TextView
                             android:id="@+id/textViewNewReply"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:text="Time"
+                            android:layout_marginTop="5dp"
+                            android:text="Active time:"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
+                        <Spinner
+                            android:id="@+id/spinnerTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            android:entries="@array/spinner_options_time"
+                            app:layout_constraintBottom_toBottomOf="@+id/textViewNewReply"
+                            app:layout_constraintStart_toEndOf="@+id/textViewNewReply"
+                            app:layout_constraintTop_toTopOf="@+id/textViewNewReply" />
+
                         <LinearLayout
-                            android:id="@+id/linearLayout5"
+                            android:id="@+id/linearLayoutTime"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginTop="20dp"
                             android:orientation="horizontal"
+                            android:visibility="gone"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textViewNewReply">
+                            app:layout_constraintTop_toBottomOf="@+id/spinnerTime">
 
                             <TextView
                                 android:id="@+id/textView8"
@@ -383,16 +370,18 @@
                             android:layout_width="180dp"
                             android:layout_height="150dp"
                             android:timePickerMode="spinner"
+                            android:visibility="gone"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutTime" />
 
                         <TimePicker
                             android:id="@+id/timePickerTo"
                             android:layout_width="180dp"
                             android:layout_height="150dp"
                             android:timePickerMode="spinner"
+                            android:visibility="gone"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutTime" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -401,7 +390,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="20dp"
                         android:layout_marginRight="20dp"
                         android:layout_marginBottom="10dp"
                         android:backgroundTint="#38B6FF"

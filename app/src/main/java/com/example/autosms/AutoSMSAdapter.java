@@ -135,8 +135,16 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
                 }
             }
 
+
             //Atribuicao do tempo
-            String timeFromTo = filteredReplys.get(position).getTimeFrom() + " to " + filteredReplys.get(position).getTimeTo();
+            String timeFromTo;
+
+            if(filteredReplys.get(position).getTimeFrom().equals("24hours")) { //if it's 24hours/All day option is selected
+                timeFromTo = "All day";
+            } else {
+                timeFromTo = filteredReplys.get(position).getTimeFrom() + " to " + filteredReplys.get(position).getTimeTo();
+            }
+
             replyTime.setText(timeFromTo);
 
         }
