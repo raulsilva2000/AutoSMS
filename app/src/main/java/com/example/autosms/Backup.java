@@ -1,5 +1,6 @@
 package com.example.autosms;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,12 +27,10 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,7 +53,7 @@ public class Backup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.backup);
 
-        exitBackup = findViewById(R.id.exitBackup);
+        exitBackup = findViewById(R.id.exitMessage);
         exportButton = findViewById(R.id.exportButton);
         backupRecyclerView = findViewById(R.id.backupRecyclerView);
         importButton = findViewById(R.id.importButton);
@@ -168,6 +167,10 @@ public class Backup extends AppCompatActivity {
                                 fos.close();
 
                                 Toast.makeText(Backup.this, "Backup loaded with success", Toast.LENGTH_SHORT).show();
+
+                                Intent resultIntent = new Intent(Backup.this, MainActivity.class);
+                                resultIntent.putExtra("backup_completed", true);
+                                setResult(Activity.RESULT_OK, resultIntent);
                                 finish(); //close backup activity
                             } catch (IOException e) {
                                 throw new RuntimeException(e);

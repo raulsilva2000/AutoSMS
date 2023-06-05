@@ -2,12 +2,12 @@ package com.example.autosms;
 
 public class SIMCard {
     private String name;
-    private String number;
+    private String slotNumber;
     private boolean selected;
 
-    public SIMCard(String name, String number) {
+    public SIMCard(String name, String slotNumber) {
         this.name = name;
-        this.number = number;
+        this.slotNumber = slotNumber;
         this.selected = false;
     }
 
@@ -15,8 +15,8 @@ public class SIMCard {
         return name;
     }
 
-    public String getNumber() {
-        return number;
+    public String getSlotNumber() {
+        return slotNumber;
     }
 
     public boolean isSelected() {

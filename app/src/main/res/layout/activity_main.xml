@@ -51,14 +51,14 @@
 
             <ImageView
                 android:id="@+id/imageViewHeaderProfileImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="15dp"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/textViewTitleHeader"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textViewTitleHeader"
-                app:srcCompat="@drawable/avatar" />
+                app:srcCompat="@drawable/user_circle_256" />
 
             <TextView
                 android:id="@+id/textViewTitleHeader"

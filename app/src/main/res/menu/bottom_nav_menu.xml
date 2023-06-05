@@ -4,7 +4,7 @@
         android:title="Active"
         android:icon="@drawable/message"></item>
     <item android:id="@+id/autoSMS"
-        android:title="AutoSMS"
+        android:title="New Reply"
         android:icon="@drawable/new_image"></item>
     <item android:id="@+id/sent"
         android:title="Sent"

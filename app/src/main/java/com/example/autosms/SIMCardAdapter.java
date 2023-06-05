@@ -25,11 +25,11 @@ public class SIMCardAdapter extends ArrayAdapter<SIMCard> {
         final SIMCard simCard = getItem(position);
 
         TextView nameTextView = convertView.findViewById(R.id.text_view_name);
-        TextView numberTextView = convertView.findViewById(R.id.text_view_number);
+        TextView slotNumberTextView = convertView.findViewById(R.id.text_view_slot_number);
         CheckBox checkBox = convertView.findViewById(R.id.check_box_contact);
 
         nameTextView.setText(simCard.getName());
-        numberTextView.setText(simCard.getNumber());
+        slotNumberTextView.setText(simCard.getSlotNumber());
         checkBox.setChecked(simCard.isSelected());
 
         checkBox.setOnClickListener(new View.OnClickListener() {

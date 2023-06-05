@@ -28,6 +28,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -55,6 +56,7 @@ public class ActiveFragment extends Fragment {
     private RecyclerView recyclerViewReplys;
     private List<AutoSMS> replys = new ArrayList<>();
     Spinner sortSpinner;
+    SearchView searchView;
     TextView noReplys;
     ImageView arrowImageView;
 
@@ -77,6 +79,7 @@ public class ActiveFragment extends Fragment {
 
         sortSpinner = view.findViewById(R.id.spinner_filters);
         noReplys = view.findViewById(R.id.textViewNoReplys);
+        searchView = view.findViewById(R.id.searchView);
 
         arrowImageView = view.findViewById(R.id.arrowImageView);
         AnimatorSet animatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(getContext(), R.animator.arrow_animation);
@@ -87,16 +90,15 @@ public class ActiveFragment extends Fragment {
             noReplys.setVisibility(View.VISIBLE);
             arrowImageView.setVisibility(View.VISIBLE);
             animatorSet.start();
-
         }
 
         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedOption = parent.getItemAtPosition(position).toString();
-                if (selectedOption.equals("First created")) {
+                if (selectedOption.equals("Last created")) {
                     autoSMSAdapter.sortItemsByCreation(position);
-                } else if(selectedOption.equals("Last created")) {
+                } else if(selectedOption.equals("First created")) {
                     autoSMSAdapter.sortItemsByCreation(position);
                 }
             }
@@ -106,27 +108,35 @@ public class ActiveFragment extends Fragment {
                 //Do nothing
             }
         });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                autoSMSAdapter.filter(newText);
+                return true;
+            }
+        });
     }
 
     private void initRecyclerview(View view) {
         //First clear replys Array to load again the data from file
         replys.clear();
 
-        // Step 1: Check if "data.json" file exists
-        File file = new File(getContext().getFilesDir(), "data.json");
-        if (!file.exists()) {
-            // File doesn't exist, create it with an empty array
-            try {
+        try {
+            // Step 1: Check if "data.json" file exists
+            File file = new File(getContext().getFilesDir(), "data.json");
+            if (!file.exists()) {
+                // File doesn't exist, create it with an empty array
                 FileOutputStream outputStream = getContext().openFileOutput("data.json", Context.MODE_PRIVATE);
                 outputStream.write("[]".getBytes());
                 outputStream.close();
-                Log.d("JSON File", "data.json created successfully.");
-            } catch (IOException e) {
-                Log.e("JSON File", "Error creating data.json file: " + e.getMessage());
             }
-        }
 
-        try {
             // Step 2: Read JSON data from the file
             FileInputStream inputStream = getContext().openFileInput("data.json");
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -137,7 +147,7 @@ public class ActiveFragment extends Fragment {
             }
             reader.close();
 
-            // Step 2: Parse JSON data into objects of AutoSMS class
+            // Step 3: Parse JSON data into objects of AutoSMS class
             Gson gson = new Gson();
             AutoSMS[] autoSMSArray = gson.fromJson(jsonData.toString(), AutoSMS[].class);
             for (AutoSMS reply : autoSMSArray) {

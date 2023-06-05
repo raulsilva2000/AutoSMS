@@ -6,40 +6,39 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="5dp">
+            android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/openDrawerMenu"
+                android:id="@+id/exitMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/arrow_left" />
 
             <TextView
-                android:id="@+id/textViewTitleHeader"
+                android:id="@+id/textViewTitleHeaderMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="10dp"
                 android:text="AutoSMS Message"
                 android:textSize="19sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/openDrawerMenu"
-                app:layout_constraintStart_toEndOf="@+id/openDrawerMenu"
-                app:layout_constraintTop_toTopOf="@+id/openDrawerMenu" />
+                app:layout_constraintBottom_toBottomOf="@+id/exitMessage"
+                app:layout_constraintStart_toEndOf="@+id/exitMessage"
+                app:layout_constraintTop_toTopOf="@+id/exitMessage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -47,10 +46,11 @@
             android:id="@+id/ConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/rectangle_gray"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/rectangle_shadow"
             android:padding="10dp">
 
             <TableLayout
@@ -76,9 +76,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:text="Sent by: #2 - For all numbers"
-                            android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -88,7 +85,9 @@
 
                 <TableRow
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -112,7 +111,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_weight="0"
-                            android:text="06/03/2023 14:10"
                             app:layout_constraintBottom_toBottomOf="@+id/imageView9"
                             app:layout_constraintStart_toEndOf="@+id/imageView9"
                             app:layout_constraintTop_toTopOf="@+id/imageView9" />
@@ -150,16 +148,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
-                                android:text="+351 937 309 155"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/imageView10"
                                 app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"/>
 
                     </LinearLayout>
 
@@ -167,86 +159,79 @@
 
             </TableLayout>
 
-            <ImageView
-                android:id="@+id/imageViewReplyOptions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/tableLayout"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tableLayout"
-                app:srcCompat="@drawable/options" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_weight="1">
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/textViewImport"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
                 android:text="Message"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editTextNewMessage"
+                android:id="@+id/editTextMessageSent"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="100dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/textbox_border"
+                android:clickable="false"
+                android:editable="false"
                 android:ems="10"
-                android:gravity="start"
+                android:gravity="start|top"
                 android:hint="Message"
-                android:includeFontPadding="false"
-                android:inputType="text|textLongMessage"
-                android:overScrollMode="always"
+                android:inputType="textMultiLine"
                 android:padding="10dp"
-                android:scrollbarStyle="insideInset"
-                android:scrollbars="vertical"
-                android:singleLine="false"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewImport" />
+
+            <Button
+                android:id="@+id/buttonEditReply"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="80dp"
+                android:layout_marginEnd="15dp"
+                android:backgroundTint="#4C8239"
+                android:text="CONFIGURE THIS AUTOSMS REPLY"
+                android:visibility="invisible"
+                app:cornerRadius="5dp"
+                app:iconPadding="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextMessageSent" />
+
+            <Button
+                android:id="@+id/buttonDeleteReply"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:backgroundTint="#E35A5A"
+                android:text="DELETE THIS AUTOSMS REPLY"
+                android:visibility="invisible"
+                app:cornerRadius="5dp"
+                app:iconPadding="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonEditReply" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/buttonNewCreate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="200dp"
-        android:layout_marginEnd="15dp"
-        android:backgroundTint="#4C8239"
-        android:text="CONFIGURE THIS AUTOSMS REPLY"
-        app:cornerRadius="5dp"
-        app:iconPadding="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout1" />
-
-    <Button
-        android:id="@+id/button9"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="15dp"
-        android:backgroundTint="#E35A5A"
-        android:text="DELETE THIS AUTOSMS REPLY"
-        app:cornerRadius="5dp"
-        app:iconPadding="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonNewCreate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

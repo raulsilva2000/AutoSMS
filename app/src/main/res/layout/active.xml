@@ -20,7 +20,7 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Create a new AutoSMS Reply in the bottom + icon"
+            android:text="Create a New Reply in the bottom + icon"
             android:textSize="16sp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -83,7 +83,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
-                            android:entries="@array/spinner_filters_options"
+                            android:entries="@array/spinner_filterReplys_options"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/imageView6"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -95,7 +95,7 @@
                         android:layout_weight="1">
 
                         <SearchView
-                            android:id="@+id/searchView1"
+                            android:id="@+id/searchView"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginStart="5dp"

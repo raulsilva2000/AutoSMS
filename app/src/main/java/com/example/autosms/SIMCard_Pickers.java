@@ -63,7 +63,7 @@ public class SIMCard_Pickers extends Activity {
                 StringBuilder selectedSimCards = new StringBuilder();
                 for (SIMCard simCard : simCards) {
                     if (simCard.isSelected()) {
-                        selectedSimCards.append(simCard.getNumber()).append(", ");
+                        selectedSimCards.append(simCard.getSlotNumber()).append(", ");
                     }
                 }
                 if (selectedSimCards.length() > 0) {
@@ -96,8 +96,7 @@ public class SIMCard_Pickers extends Activity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CODE_READ_SIM_CARDS) {
             // Check if the permission is granted
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -117,10 +116,10 @@ public class SIMCard_Pickers extends Activity {
                 List<SubscriptionInfo> subscriptionInfoList = SubscriptionManager.from(this).getActiveSubscriptionInfoList();
                 if (subscriptionInfoList != null) {
                     for (SubscriptionInfo subscriptionInfo : subscriptionInfoList) {
-                        String number = subscriptionInfo.getNumber();
                         String displayName = subscriptionInfo.getDisplayName().toString();
+                        String simIndex = String.valueOf(subscriptionInfo.getSimSlotIndex());
 
-                        SIMCard simCard = new SIMCard(displayName, number);
+                        SIMCard simCard = new SIMCard(displayName, simIndex);
                         simCards.add(simCard);
                     }
                     simCardAdapter.notifyDataSetChanged();

@@ -16,8 +16,14 @@
         <item>Specific Cards</item>
     </string-array>
 
-    <string-array name="spinner_filters_options">
-        <item>First created</item>
+    <string-array name="spinner_filterReplys_options">
         <item>Last created</item>
+        <item>First created</item>
     </string-array>
+
+    <string-array name="spinner_filterMessages_options">
+        <item>Last sent</item>
+        <item>First sent</item>
+    </string-array>
+
 </resources>

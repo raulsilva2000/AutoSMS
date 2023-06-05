@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -83,7 +84,7 @@ public class NewAutoSMSFragment extends Fragment {
         selectedContactsNumber = view.findViewById(R.id.selectedContacts);
 
         title = view.findViewById(R.id.editTextNewTitle);
-        message = view.findViewById(R.id.editTextNewMessage);
+        message = view.findViewById(R.id.editTextNewReply);
 
         addSimCards = view.findViewById(R.id.buttonNewAddCards);
         addContacts = view.findViewById(R.id.buttonNewAddContacts);
@@ -228,6 +229,14 @@ public class NewAutoSMSFragment extends Fragment {
                     Type listType = new TypeToken<List<AutoSMS>>() {}.getType();
                     List<AutoSMS> replys = gson.fromJson(existingJson, listType);
 
+                    // Validation, check if there's a reply with the same title already
+                    for(AutoSMS reply : replys){
+                        if(reply.getTitle().equals(title.getText().toString())){
+                            Toast.makeText(getContext(), "There's a reply with that title already! Please change it", Toast.LENGTH_SHORT).show();
+                            throw new IOException();
+                        }
+                    }
+
                     //Check which spinner option is selected
                     if(spinnerSimCards.getSelectedItemPosition() == 0){ //check if option selected is "All SIM Cards"
                         selectedSimCardsList = new ArrayList<>(Arrays.asList("allSimCards"));
@@ -241,6 +250,12 @@ public class NewAutoSMSFragment extends Fragment {
 
                     // Check which CheckBoxs are checked
                     Boolean[] days = new Boolean[]{checkBoxNewMon.isChecked(), checkBoxNewTue.isChecked(), checkBoxNewWed.isChecked(), checkBoxNewThu.isChecked(), checkBoxNewFri.isChecked(), checkBoxNewSat.isChecked(), checkBoxNewSun.isChecked()};
+
+                    // Validation, check if 0 days are selected
+                    if(Arrays.equals(days, new Boolean[]{false, false, false, false, false, false, false})){
+                        Toast.makeText(getContext(), "You need to select atleast 1 day", Toast.LENGTH_SHORT).show();
+                        throw new IOException();
+                    }
 
                     // Get the selected hour and minute from the TimePicker
                     int hourFrom, minuteFrom, hourTo, minuteTo;
@@ -256,7 +271,7 @@ public class NewAutoSMSFragment extends Fragment {
                     timeTo = String.format(Locale.getDefault(), "%02d:%02d", hourTo, minuteTo);
 
                     // Update the data structure (e.g., add, remove, or modify elements)
-                    replys.add(new AutoSMS(title.getText().toString(),
+                    replys.add(0, new AutoSMS(title.getText().toString(),
                             message.getText().toString(),
                             selectedSimCardsList,
                             selectedNumbersList,
@@ -275,6 +290,8 @@ public class NewAutoSMSFragment extends Fragment {
                     osw.close();
                     fos.close();
                     Toast.makeText(getContext(), "New AutoSMS Reply Created", Toast.LENGTH_SHORT).show();
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    mainActivity.showSelectedPage(R.id.active);
 
                     // Reset Values after creating new autosms reply
                     title.setText("");

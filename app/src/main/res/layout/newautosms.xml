@@ -57,6 +57,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp"
                             android:ems="10"
+                            android:hint="Write here..."
                             android:inputType="text"
                             android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -81,25 +82,19 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <EditText
-                            android:id="@+id/editTextNewMessage"
+                            android:id="@+id/editTextNewReply"
                             android:layout_width="match_parent"
-                            android:layout_height="150dp"
+                            android:layout_height="100dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="10dp"
                             android:background="@drawable/textbox_border"
                             android:ems="10"
-                            android:gravity="start"
+                            android:gravity="start|top"
                             android:hint="Write here..."
-                            android:includeFontPadding="false"
-                            android:inputType="text|textLongMessage"
-                            android:overScrollMode="always"
+                            android:inputType="textMultiLine"
                             android:padding="10dp"
-                            android:scrollbarStyle="insideInset"
-                            android:scrollbars="vertical"
-                            android:singleLine="false"
                             android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -189,7 +184,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
+                        android:layout_marginTop="15dp">
 
                         <Button
                             android:id="@+id/buttonNewAddContacts"
@@ -245,7 +240,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="20dp">
+                        android:layout_marginTop="10dp">
 
                         <TextView
                             android:id="@+id/textViewNew"

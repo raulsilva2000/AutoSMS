@@ -95,28 +95,27 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/arrow_right_white" />
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/imageViewDrawerProfileImage"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_margin="10dp"
-                    android:padding="5dp"
-                    android:src="@drawable/person"
+                <ImageView
+                    android:id="@+id/imageViewProfile"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="25dp"
                     android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:shapeAppearanceOverlay="@style/circleImageView"
-                    app:strokeColor="@android:color/white"
-                    app:strokeWidth="0dp" />
+                    app:srcCompat="@drawable/user_circle_256" />
 
                 <TextView
                     android:id="@+id/textViewDrawerName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"
                     android:textColor="@color/white"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="@+id/imageViewDrawerProfileImage"
-                    app:layout_constraintTop_toBottomOf="@+id/imageViewDrawerProfileImage" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageViewProfile" />
 
                 <TextView
                     android:id="@+id/textViewDrawerEmail"
@@ -231,7 +230,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/editprofileMenu"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/imageView400"
@@ -288,7 +288,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/languageMenu"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/imageView500"

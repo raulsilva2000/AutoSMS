@@ -6,13 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class ContactAdapter extends ArrayAdapter<Contact> {
@@ -30,7 +25,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         final Contact contact = getItem(position);
 
         TextView nameTextView = convertView.findViewById(R.id.text_view_name);
-        TextView numberTextView = convertView.findViewById(R.id.text_view_number);
+        TextView numberTextView = convertView.findViewById(R.id.text_view_slot_number);
         CheckBox checkBox = convertView.findViewById(R.id.check_box_contact);
 
         nameTextView.setText(contact.getName());

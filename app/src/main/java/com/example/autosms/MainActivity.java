@@ -1,24 +1,33 @@
 package com.example.autosms;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -26,14 +35,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
@@ -59,13 +75,15 @@ public class MainActivity extends AppCompatActivity {
     Button drawerRegister;
     ActivityResultLauncher<Intent> launcher;
     FirebaseAuth mAuth;
-
     private static final int REQUEST_PERMISSIONS_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Request runtime permissions
+        requestPermissions();
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
@@ -84,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLogin = findViewById(R.id.loginButtonDrawerLogin);
         drawerRegister = findViewById(R.id.loginButtonDrawerRegister);
         headerProfileImage = findViewById(R.id.imageViewHeaderProfileImage);
-        drawerProfileImage = findViewById(R.id.imageViewDrawerProfileImage);
+        drawerProfileImage = findViewById(R.id.imageViewProfile);
         drawerName = findViewById(R.id.textViewDrawerName);
         drawerEmail = findViewById(R.id.textViewDrawerEmail);
 
@@ -93,15 +111,19 @@ public class MainActivity extends AppCompatActivity {
         updateTextViewTitleHeader("Active Replys");
         getSupportFragmentManager().beginTransaction().replace(R.id.containerFrame, activeFragment).commit();
 
-        // Request runtime permissions
-        requestPermissions();
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Create an Intent to start the new activity
                 Intent intent = new Intent(MainActivity.this, Login.class);
                 launcher.launch(intent);
+            }
+        });
+
+        headerProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopupMenu(view);
             }
         });
 
@@ -197,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 Intent intent = new Intent(MainActivity.this, Backup.class);
-                startActivity(intent);
+                launcher.launch(intent);
             }
         });
 
@@ -213,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                logout(view);
+                logout();
             }
         });
 
@@ -221,16 +243,26 @@ public class MainActivity extends AppCompatActivity {
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
-                        if (data != null && data.hasExtra("email")) {
+                        if (data != null && data.hasExtra("email")) { //User logs in
                             String email = data.getStringExtra("email");
                             if (!email.isEmpty()) {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 if (user != null) {
                                     drawerName.setText(user.getDisplayName());
                                     drawerEmail.setText(user.getEmail());
+                                    closeDrawer();
                                     changeToLoggedIn();
                                 }
                             }
+                        } else if (data != null && data.hasExtra("backup_completed")) {
+                            // We need to load active fragment again to refresh the RecyclerView
+                            showSelectedPage(R.id.sent);
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showSelectedPage(R.id.active);
+                                }
+                            }, 200); // Delay to give time for the UI change
                         }
                     }
                 });
@@ -246,6 +278,30 @@ public class MainActivity extends AppCompatActivity {
         drawerEmail.setVisibility(View.VISIBLE);
         logoutMenu.setVisibility(View.VISIBLE);
         backupMenu.setVisibility(View.VISIBLE);
+    }
+
+    private void showPopupMenu(View anchorView) {
+        PopupMenu popupMenu = new PopupMenu(this, anchorView);
+        popupMenu.getMenuInflater().inflate(R.menu.popup_header_image, popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+
+                if (id == R.id.backup) {
+                    // Open Backup Page
+                    Intent intent = new Intent(MainActivity.this, Backup.class);
+                    launcher.launch(intent);
+                    return true;
+                } else if (id == R.id.logout) {
+                    // Proceed to logout
+                    logout();
+                    return true;
+                }
+                return false;
+            }
+        });
+        popupMenu.show();
     }
 
     public void updateTextViewTitleHeader(String text) {
@@ -285,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void logout(View view) {
+    public void logout() {
         logoutMenu((this));
     }
 
@@ -329,32 +385,56 @@ public class MainActivity extends AppCompatActivity {
         closeDrawer();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void requestPermissions() {
-        //Request permissions
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.SEND_SMS}, REQUEST_PERMISSIONS_CODE);
+        String[] permissions = new String[]{
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.INTERNET,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_PHONE_NUMBERS,
+                Manifest.permission.SEND_SMS,
+                Manifest.permission.FOREGROUND_SERVICE,
+                Manifest.permission.READ_CALL_LOG
+        };
+
+        List<String> permissionsToRequest = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(permission);
+            }
         }
 
-        //Request permissions again if not accepted
-        while (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            tryAgain();
+        if (!permissionsToRequest.isEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionsToRequest.toArray(new String[0]), REQUEST_PERMISSIONS_CODE);
         }
     }
 
-    private void tryAgain() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Need Permissions");
-        builder.setMessage("This app needs PHONE, SMS permissions to work.");
-        builder.setPositiveButton("TRY AGAIN", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                requestPermissions();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSIONS_CODE) {
+            boolean allPermissionsGranted = true;
+            for (int grantResult : grantResults) {
+                if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                    allPermissionsGranted = false;
+                    break;
+                }
             }
-        });
-        builder.setNegativeButton("CLOSE APP", new DialogInterface.OnClickListener() {
+
+            if (!allPermissionsGranted) {
+                showPermissionDeniedDialog();
+            }
+        }
+    }
+
+    private void showPermissionDeniedDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Permissions Denied");
+        builder.setMessage("This app needs all the requested permissions to function properly. Please grant the permissions from the device settings.");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+                dialog.dismiss();
                 finish();
             }
         });
