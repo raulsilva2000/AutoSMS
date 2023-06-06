@@ -180,14 +180,11 @@ public class Backup extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             // Error occurred while downloading the file
-                            // You can handle the failure event here
                             Toast.makeText(Backup.this, "Failed to load backup: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-
-                    Log.d("Selected Backup", selectedBackupDate);
                 } else {
-                    Log.d("Selected Backup", "No backup selected");
+                    Toast.makeText(Backup.this, "No backup selected", Toast.LENGTH_SHORT).show();
                 }
             }
         });

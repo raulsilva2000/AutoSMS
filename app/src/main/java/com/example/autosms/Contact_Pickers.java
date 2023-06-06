@@ -25,7 +25,6 @@ public class Contact_Pickers extends Activity {
     TextView cancelButton;
     Button button_select_all;
     Button button_deselect_all;
-    private static final int REQUEST_CODE_READ_CONTACTS = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,17 +41,8 @@ public class Contact_Pickers extends Activity {
         contactAdapter = new ContactAdapter(this, contacts);
         contactsListView.setAdapter(contactAdapter);
 
-        // Check if the READ_CONTACTS permission is granted
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted, request it
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_CONTACTS},
-                    REQUEST_CODE_READ_CONTACTS);
-        } else {
-            // Permission is already granted, proceed with loading contacts
-            loadContacts();
-        }
+        // Proceed with loading contacts
+        loadContacts();
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,21 +90,6 @@ public class Contact_Pickers extends Activity {
                 contactAdapter.notifyDataSetChanged();
             }
         });
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CODE_READ_CONTACTS) {
-            // Check if the permission is granted
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, proceed with loading contacts
-                loadContacts();
-            } else {
-                // Permission denied, handle accordingly (e.g., show an error message)
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
     private void loadContacts() {

@@ -18,7 +18,6 @@ public class CheckMessageSent extends AppCompatActivity {
     TextView messageTime;
     TextView messageNumber;
     EditText messageSent;
-    ActivityResultLauncher<Intent> launcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

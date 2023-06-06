@@ -20,10 +20,10 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import java.util.Objects;
 
 public class Register extends AppCompatActivity {
-    private EditText userEmail, userName, userPassword, userConfirmPassword;
-    private Button registerButton;
-    private TextView clickLogin;
-    private ImageView backRegister;
+    EditText userEmail, userName, userPassword, userConfirmPassword;
+    Button registerButton;
+    TextView clickLogin;
+    ImageView backRegister;
     FirebaseAuth mAuth;
 
     @Override

@@ -26,13 +26,10 @@ import java.util.Objects;
 
 public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHolder> {
     List<AutoSMS> replys = new ArrayList<>();
-    List<AutoSMS> filteredReplys = new ArrayList<>();
     Context context;
-    private RecyclerView myRecyclerView;
 
     public AutoSMSAdapter(List<AutoSMS> replys, Context context) {
         this.replys.addAll(replys);
-        this.filteredReplys.addAll(replys);
         this.context = context;
     }
 
@@ -51,7 +48,7 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return filteredReplys.size();
+        return replys.size();
     }
 
 
@@ -81,23 +78,23 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
 
         public void bind(int position) {
             this.position = position;
-            //Atribuicao do titulo
-            replyTitle.setText(filteredReplys.get(position).getTitle());
+            //Attribution of title
+            replyTitle.setText(replys.get(position).getTitle());
 
-            //Atribuicao dos dias
+            //Attribution of days
             StringBuilder replyDaysText = new StringBuilder();
-            if(Arrays.equals(filteredReplys.get(position).getDays(), new Boolean[]{true, true, true, true, true, true, true})){
+            if(Arrays.equals(replys.get(position).getDays(), new Boolean[]{true, true, true, true, true, true, true})){
                 replyDaysText.append("Every day");
                 replyDays.setText(replyDaysText);
-            } else if (Arrays.equals(filteredReplys.get(position).getDays(), new Boolean[]{true, true, true, true, true, false, false})){
+            } else if (Arrays.equals(replys.get(position).getDays(), new Boolean[]{true, true, true, true, true, false, false})){
                 replyDaysText.append("Week days");
                 replyDays.setText(replyDaysText);
-            } else if (Arrays.equals(filteredReplys.get(position).getDays(), new Boolean[]{false, false, false, false, false, true, true})) {
+            } else if (Arrays.equals(replys.get(position).getDays(), new Boolean[]{false, false, false, false, false, true, true})) {
                 replyDaysText.append("Weekend days");
                 replyDays.setText(replyDaysText);
             } else {
                 int i=0;
-                for(Boolean value : filteredReplys.get(position).getDays()){
+                for(Boolean value : replys.get(position).getDays()){
                     if(i==0 && value.equals(true)){
                         replyDaysText.append("Mon./");
                     } else if (i==1 && value.equals(true)) {
@@ -118,31 +115,30 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
                 replyDays.setText(replyDaysText.substring(0, replyDaysText.length() - 1));
             }
 
-            //Atribuicao do total de numeros
-            if(Objects.equals(filteredReplys.get(position).getNumbers().get(0), "unknownNumbers")){ //if it's to Unknown Numbers
+            //Attribution of numbers
+            if(Objects.equals(replys.get(position).getNumbers().get(0), "unknownNumbers")){ //if it's to Unknown Numbers
                 String totalNumbers = "Unknown numbers";
                 replyNumbers.setText(totalNumbers);
-            } else if(Objects.equals(filteredReplys.get(position).getNumbers().get(0), "anyNumber")){ //if it's to Any Number
+            } else if(Objects.equals(replys.get(position).getNumbers().get(0), "anyNumber")){ //if it's to Any Number
                 String totalNumbers = "Any number";
                 replyNumbers.setText(totalNumbers);
             } else { //if it's to Specific Contact
-                if(filteredReplys.get(position).getNumbers().size() == 1){
-                    String totalNumbers = String.valueOf(filteredReplys.get(position).getNumbers().size()) + " number";
+                if(replys.get(position).getNumbers().size() == 1){
+                    String totalNumbers = replys.get(position).getNumbers().size() + " number";
                     replyNumbers.setText(totalNumbers);
                 } else {
-                    String totalNumbers = String.valueOf(filteredReplys.get(position).getNumbers().size()) + " numbers";
+                    String totalNumbers = replys.get(position).getNumbers().size() + " numbers";
                     replyNumbers.setText(totalNumbers);
                 }
             }
 
-
-            //Atribuicao do tempo
+            //Attribution of time
             String timeFromTo;
 
-            if(filteredReplys.get(position).getTimeFrom().equals("24hours")) { //if it's 24hours/All day option is selected
+            if(replys.get(position).getTimeFrom().equals("24hours")) { //if it's 24hours/All day option is selected
                 timeFromTo = "All day";
             } else {
-                timeFromTo = filteredReplys.get(position).getTimeFrom() + " to " + filteredReplys.get(position).getTimeTo();
+                timeFromTo = replys.get(position).getTimeFrom() + " to " + replys.get(position).getTimeTo();
             }
 
             replyTime.setText(timeFromTo);
@@ -164,14 +160,14 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
                             //Update JSON file
                             try {
                                 //delete item in the RecyclerView
-                                filteredReplys.remove(position);
+                                replys.remove(position);
                                 notifyItemRemoved(position);
-                                notifyItemRangeChanged(position, filteredReplys.size());
+                                notifyItemRangeChanged(position, replys.size());
 
                                 Gson gson = new Gson();
 
                                 // Convert the updated data structure to JSON
-                                String updatedJson = gson.toJson(filteredReplys);
+                                String updatedJson = gson.toJson(replys);
 
                                 // Write the updated JSON to the file
                                 FileOutputStream fos = context.openFileOutput("data.json", Context.MODE_PRIVATE);
@@ -197,7 +193,7 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
     // Sort method
     public void sortItemsByCreation(int sortBy) {
         // Apply the sorting criterion to the filtered list
-        filteredReplys.sort(new Comparator<AutoSMS>() {
+        replys.sort(new Comparator<AutoSMS>() {
             @Override
             public int compare(AutoSMS item1, AutoSMS item2) {
                 if (sortBy == 0) { //Last created
@@ -207,24 +203,6 @@ public class AutoSMSAdapter extends RecyclerView.Adapter<AutoSMSAdapter.ViewHold
                 }
             }
         });
-
-        notifyDataSetChanged();
-    }
-
-    public void filter(String query) {
-        filteredReplys.clear();
-
-        if (query.isEmpty()) {
-            filteredReplys.addAll(replys);
-        } else {
-            String lowerCaseQuery = query.toLowerCase();
-
-            for (AutoSMS reply : replys) {
-                if (reply.getTitle().toLowerCase().contains(lowerCaseQuery)) {
-                    filteredReplys.add(reply);
-                }
-            }
-        }
 
         notifyDataSetChanged();
     }

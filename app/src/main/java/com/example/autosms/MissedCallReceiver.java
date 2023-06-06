@@ -50,7 +50,7 @@ public class MissedCallReceiver extends BroadcastReceiver {
         }
     }
 
-    //Aqui vamos ter percorrer cada resposta automatica do data.json e enviar sms se a situacao corresponder a uma determinada resposta automatica
+    //Performs the necessary tasks for sending an SMS as a response to the missed call in relation to the active replys
     private void sendingProcess() {
         // Step 1: Read JSON data from the file
         FileInputStream inputStream = null;
@@ -131,11 +131,11 @@ public class MissedCallReceiver extends BroadcastReceiver {
             Date endTime = null;
             Date currentTime = null;
 
-            boolean allday = false; // represents option All day (24hours) is selected
+            boolean allday = false; // represents option All day (24hours) is not selected
 
-            // VALIDATION
+            // CHECK IF ACTIVE REPLYS IN "autoSMSArray" WILL RESPOND
 
-            for (AutoSMS reply : autoSMSArray) {  //ir a cada resposta automatica e ver se responde a chamada perdida
+            for (AutoSMS reply : autoSMSArray) {
                 if (!reply.getTimeFrom().equals("24hours")) { //if time is not equal to 24hours then go get timeFrom and timeTo
                     startTime = formatTime.parse(reply.getTimeFrom());
                     endTime = formatTime.parse(reply.getTimeTo());

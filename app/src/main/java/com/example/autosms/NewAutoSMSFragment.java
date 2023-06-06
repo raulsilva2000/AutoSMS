@@ -86,18 +86,13 @@ public class NewAutoSMSFragment extends Fragment {
         View view = inflater.inflate(R.layout.newautosms, container, false);
 
         spinnerSimCards = view.findViewById(R.id.spinnerSimCards);
-
         spinnerNumbers = view.findViewById(R.id.spinnerNumbers);
         selectedContactsNumber = view.findViewById(R.id.selectedContacts);
-
         spinnerTime = view.findViewById(R.id.spinnerTime);
         linearLayoutTime = view.findViewById(R.id.linearLayoutTime);
-
         title = view.findViewById(R.id.editTextNewTitle);
         message = view.findViewById(R.id.editTextNewReply);
-
         addContacts = view.findViewById(R.id.buttonNewAddContacts);
-
         checkBoxNewMon = view.findViewById(R.id.checkBoxNewMon);
         checkBoxNewTue = view.findViewById(R.id.checkBoxNewTue);
         checkBoxNewWed = view.findViewById(R.id.checkBoxNewWed);
@@ -105,7 +100,6 @@ public class NewAutoSMSFragment extends Fragment {
         checkBoxNewFri = view.findViewById(R.id.checkBoxNewFri);
         checkBoxNewSat = view.findViewById(R.id.checkBoxNewSat);
         checkBoxNewSun = view.findViewById(R.id.checkBoxNewSun);
-
         timePickerFrom = view.findViewById(R.id.timePickerFrom);
         timePickerTo = view.findViewById(R.id.timePickerTo);
 
@@ -199,9 +193,7 @@ public class NewAutoSMSFragment extends Fragment {
         buttonNewCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Perform the JSON file update logic here
-
-                // Read the existing JSON file, update the data structure, and write the updated JSON back to the file
+                // Read the existing JSON file
                 try {
                     FileInputStream fis = getContext().openFileInput("data.json");
                     InputStreamReader isr = new InputStreamReader(fis);

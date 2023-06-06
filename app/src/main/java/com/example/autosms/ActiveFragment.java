@@ -56,7 +56,6 @@ public class ActiveFragment extends Fragment {
     private RecyclerView recyclerViewReplys;
     private List<AutoSMS> replys = new ArrayList<>();
     Spinner sortSpinner;
-    SearchView searchView;
     TextView noReplys;
     ImageView arrowImageView;
 
@@ -79,7 +78,6 @@ public class ActiveFragment extends Fragment {
 
         sortSpinner = view.findViewById(R.id.spinner_filters);
         noReplys = view.findViewById(R.id.textViewNoReplys);
-        searchView = view.findViewById(R.id.searchView);
 
         arrowImageView = view.findViewById(R.id.arrowImageView);
         AnimatorSet animatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(getContext(), R.animator.arrow_animation);
@@ -106,19 +104,6 @@ public class ActiveFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 //Do nothing
-            }
-        });
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                autoSMSAdapter.filter(newText);
-                return true;
             }
         });
     }

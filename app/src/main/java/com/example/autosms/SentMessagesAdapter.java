@@ -21,7 +21,7 @@ import java.util.List;
 public class SentMessagesAdapter extends RecyclerView.Adapter<SentMessagesAdapter.ViewHolder> {
     List<SentMessage> messages;
     Context context;
-    private RecyclerView myRecyclerView;
+
     public SentMessagesAdapter(List<SentMessage> messages, Context context) {
         this.messages = messages;
         this.context = context;
@@ -75,13 +75,13 @@ public class SentMessagesAdapter extends RecyclerView.Adapter<SentMessagesAdapte
 
         public void bind(int position) {
             this.position = position;
-            //Atribuicao do titulo
+            //Attribution of title
             messageTitle.setText(String.format("Sent by: %s", messages.get(position).getTitle()));
 
-            //Atribuicao do tempo
+            //Attribution of time
             messageTime.setText(messages.get(position).getTime());
 
-            //Atribuicao do numero
+            //Attribution of numbers
             messageNumber.setText(messages.get(position).getNumber());
 
             message = messages.get(position).getMessage();

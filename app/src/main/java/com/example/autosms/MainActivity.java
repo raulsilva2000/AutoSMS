@@ -86,9 +86,7 @@ public class MainActivity extends AppCompatActivity {
         requestPermissions();
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
         drawerLayout = findViewById(R.id.DrawerLayoutMain);
-
         menuIcon = findViewById(R.id.openDrawerMenu);
         closeMenu = findViewById(R.id.imageView21);
         homeMenu = findViewById(R.id.homeMenu);
@@ -114,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create an Intent to start the new activity
                 Intent intent = new Intent(MainActivity.this, Login.class);
                 launcher.launch(intent);
             }
@@ -130,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
         drawerLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create an Intent to start the new activity
                 Intent intent = new Intent(MainActivity.this, Login.class);
                 launcher.launch(intent);
             }
@@ -139,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
         drawerRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create an Intent to start the new activity
                 Intent intent = new Intent(MainActivity.this, Register.class);
                 launcher.launch(intent);
             }
@@ -333,13 +328,9 @@ public class MainActivity extends AppCompatActivity {
         showSelectedPage(R.id.sent);
     }
 
-    public void editProfile(View view) {
+    public void editProfile(View view) {}
 
-    }
-
-    public void language(View view) {
-
-    }
+    public void language(View view) {}
 
     public void logout() {
         logoutMenu((this));
@@ -393,7 +384,6 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.READ_PHONE_NUMBERS,
                 Manifest.permission.SEND_SMS,
-                Manifest.permission.FOREGROUND_SERVICE,
                 Manifest.permission.READ_CALL_LOG
         };
 
