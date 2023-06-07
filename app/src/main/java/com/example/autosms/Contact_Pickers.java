@@ -18,6 +18,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Contact_Pickers extends Activity {
     private ArrayList<Contact> contacts;
@@ -103,12 +104,26 @@ public class Contact_Pickers extends Activity {
         );
 
         if (cursor != null && cursor.getCount() > 0) {
+            HashSet<String> contactSet = new HashSet<>(); // HashSet to track unique contacts
+
             while (cursor.moveToNext()) {
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 String number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                Contact contact = new Contact(name, number);
-                contacts.add(contact);
+                // Normalize the phone number by removing spaces
+                String normalizedNumber = number.replaceAll("\\s+", "");
+
+                // Create a unique identifier for the contact by combining name and number
+                String contactIdentifier = name + normalizedNumber;
+
+                // Check if the contact has already been added
+                if (!contactSet.contains(contactIdentifier)) {
+                    Contact contact = new Contact(name, normalizedNumber);
+                    contacts.add(contact);
+
+                    // Add the contact identifier to the set to mark it as added
+                    contactSet.add(contactIdentifier);
+                }
             }
             cursor.close();
         }
