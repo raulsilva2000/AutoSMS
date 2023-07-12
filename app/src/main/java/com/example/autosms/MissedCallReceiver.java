@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
@@ -44,10 +45,31 @@ public class MissedCallReceiver extends BroadcastReceiver {
         this.context = context;
         String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
         phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-        if (phoneNumber != null && TelephonyManager.EXTRA_STATE_IDLE.equals(state)) { //if missed call
-            // Call not picked up, start the service to send SMS
-            sendingProcess();
+
+        if(phoneNumber != null){
+            SharedPreferences sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            Log.d("MissedCallReceiver", "Call state: " + state + " " + "Phone number: " + phoneNumber);
+
+            if(state.equals("RINGING")){
+                editor.putString("previousStateKey", state);
+                editor.apply();
+            }
+
+            if (TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
+                String retrievedPreviousState = sharedPreferences.getString("previousStateKey", "0");
+                // Call ended
+                if (retrievedPreviousState.equals("RINGING")) {
+                    // Limpar as sharedPreferences, para limpar o estado anterior guardado
+                    editor.clear();
+                    editor.apply();
+                    // If it's a missed call from an external number, send the SMS
+                    sendingProcess();
+                }
+            }
         }
+
     }
 
     //Performs the necessary tasks for sending an SMS as a response to the missed call in relation to the active replys
